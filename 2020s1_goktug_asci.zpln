@@ -51,7 +51,7 @@
       "dateFinished": "2020-12-07T23:27:09+0100",
       "status": "FINISHED",
       "focus": true,
-      "$$hashKey": "object:260"
+      "$$hashKey": "object:263"
     },
     {
       "text": "--Temp\nshow tables;",
@@ -119,7 +119,7 @@
       "dateStarted": "2020-12-02T19:50:19+0100",
       "dateFinished": "2020-12-02T19:50:19+0100",
       "status": "FINISHED",
-      "$$hashKey": "object:261"
+      "$$hashKey": "object:264"
     },
     {
       "text": "--Step 3\ndrop table if exists sentiment_dictionary;\ncreate external table sentiment_dictionary (\n  type string,\n  length integer,\n  word string,\n  word_type string,\n  stemmed string,\n  polarity string\n)\nrow format serde 'org.apache.hadoop.hive.serde2.OpenCSVSerde' with serdeproperties (\"separatorChar\" = \"\\t\")\nstored as textfile\nlocation '/user/osbdet/datalake/raw/sentiment_dictionary/';\n",
@@ -163,7 +163,7 @@
       "dateStarted": "2020-12-07T23:27:41+0100",
       "dateFinished": "2020-12-07T23:27:43+0100",
       "status": "FINISHED",
-      "$$hashKey": "object:262"
+      "$$hashKey": "object:265"
     },
     {
       "text": "--Temp\nselect * from sentiment_dictionary",
@@ -236,7 +236,7 @@
       "dateStarted": "2020-12-02T19:50:03+0100",
       "dateFinished": "2020-12-02T19:50:05+0100",
       "status": "FINISHED",
-      "$$hashKey": "object:263"
+      "$$hashKey": "object:266"
     },
     {
       "text": "--Step 4\ndrop table if exists tweets_json;\ncreate external table tweets_json (\n    created_at string,\n    id bigint,\n    id_str string,\n    text string,\n    `user` struct<id:bigint,\n                  id_str:string,\n                  screen_name:string,\n                  name:string,\n                  followers_count:int,\n                  statuses_count:int,\n                  geo_enabled:boolean>,\n    `entities` struct<user_mentions:array<struct<screen_name:string>>,\n                      hashtags:array<struct<text:string>>>,               \n    lang string\n)\nrow format serde 'org.apache.hive.hcatalog.data.JsonSerDe'\nstored as textfile\nlocation '/user/osbdet/tweets/';",
@@ -280,7 +280,7 @@
       "dateStarted": "2020-12-07T23:27:50+0100",
       "dateFinished": "2020-12-07T23:27:51+0100",
       "status": "FINISHED",
-      "$$hashKey": "object:264"
+      "$$hashKey": "object:267"
     },
     {
       "text": "--Step 5 / it takes 3 min 12 secs. / count: 488\nselect count(*) from tweets_json;",
@@ -353,7 +353,7 @@
           "values": [
             {
               "jobUrl": "http://localhost:8088/proxy/application_1607379888334_0001/",
-              "$$hashKey": "object:12919"
+              "$$hashKey": "object:1528"
             }
           ],
           "interpreterSettingId": "hive"
@@ -366,7 +366,7 @@
       "dateStarted": "2020-12-07T23:28:23+0100",
       "dateFinished": "2020-12-07T23:31:35+0100",
       "status": "FINISHED",
-      "$$hashKey": "object:265"
+      "$$hashKey": "object:268"
     },
     {
       "text": "--Step 6\ndrop table if exists tweets_parquet;\ncreate table tweets_parquet stored as parquet as\n                    select * from tweets_json;",
@@ -411,7 +411,7 @@
           "values": [
             {
               "jobUrl": "http://localhost:8088/proxy/application_1607379888334_0002/",
-              "$$hashKey": "object:13003"
+              "$$hashKey": "object:1574"
             }
           ],
           "interpreterSettingId": "hive"
@@ -424,7 +424,7 @@
       "dateStarted": "2020-12-07T23:32:31+0100",
       "dateFinished": "2020-12-07T23:34:21+0100",
       "status": "FINISHED",
-      "$$hashKey": "object:266"
+      "$$hashKey": "object:269"
     },
     {
       "text": "--Temp\nshow tables;",
@@ -519,7 +519,7 @@
       "dateStarted": "2020-12-07T23:34:28+0100",
       "dateFinished": "2020-12-07T23:34:28+0100",
       "status": "FINISHED",
-      "$$hashKey": "object:267"
+      "$$hashKey": "object:270"
     },
     {
       "text": "--Step 7 / it takes less than 1 sec / count: 388 / parquet is much faster\nselect COUNT(*) from tweets_parquet;\n",
@@ -587,7 +587,7 @@
       "dateStarted": "2020-12-07T23:34:33+0100",
       "dateFinished": "2020-12-07T23:34:34+0100",
       "status": "FINISHED",
-      "$$hashKey": "object:268"
+      "$$hashKey": "object:271"
     },
     {
       "text": "--Temp\nselect * from tweets_parquet;",
@@ -661,7 +661,7 @@
       "dateStarted": "2020-11-29T16:22:40+0100",
       "dateFinished": "2020-11-29T16:22:41+0100",
       "status": "FINISHED",
-      "$$hashKey": "object:269"
+      "$$hashKey": "object:272"
     },
     {
       "text": "--Step 8 \n--Step 5 > it takes 3 min 12 secs. / count: 488\n--Step 7 > it takes 1 sec / count: 488 / Parquet stored managed table is much faster",
@@ -690,18 +690,18 @@
       "id": "paragraph_1606654581211_400142343",
       "dateCreated": "2020-11-29T13:56:21+0100",
       "status": "READY",
-      "$$hashKey": "object:270"
+      "$$hashKey": "object:273"
     },
     {
-      "text": "--Step 9\nselect count(`user`) as geo_enabled_count from tweets_parquet where `user`.geo_enabled = true",
+      "text": "--Step 9\nselect count(*) from (select `user`.screen_name from tweets_parquet where `user`.geo_enabled = true group by `user`.screen_name) a",
       "user": "anonymous",
-      "dateUpdated": "2020-12-07T23:34:53+0100",
+      "dateUpdated": "2020-12-10T21:54:24+0100",
       "config": {
         "colWidth": 12,
         "fontSize": 9,
         "enabled": true,
         "results": {
-          "1": {
+          "0": {
             "graph": {
               "mode": "table",
               "height": 300,
@@ -712,6 +712,33 @@
                   "tableColumnTypeState": {
                     "names": {
                       "geo_enabled_count": "string"
+                    },
+                    "updated": false
+                  },
+                  "tableOptionSpecHash": "[{\"name\":\"useFilter\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable filter for columns\"},{\"name\":\"showPagination\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable pagination for better navigation\"},{\"name\":\"showAggregationFooter\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable a footer for displaying aggregated values\"}]",
+                  "tableOptionValue": {
+                    "useFilter": false,
+                    "showPagination": false,
+                    "showAggregationFooter": false
+                  },
+                  "updated": false,
+                  "initialized": false
+                }
+              },
+              "commonSetting": {}
+            }
+          },
+          "1": {
+            "graph": {
+              "mode": "table",
+              "height": 300,
+              "optionOpen": false,
+              "setting": {
+                "table": {
+                  "tableGridState": {},
+                  "tableColumnTypeState": {
+                    "names": {
+                      "_c0": "string"
                     },
                     "updated": false
                   },
@@ -746,11 +773,11 @@
         "msg": [
           {
             "type": "TEXT",
-            "data": "INFO  : Compiling command(queryId=osbdet_20201207233453_f9405e64-e343-4eda-ba4f-10acf4b6f324): select count(`user`) as geo_enabled_count from tweets_parquet where `user`.geo_enabled = true\nINFO  : Concurrency mode is disabled, not creating a lock manager\nINFO  : Semantic Analysis Completed (retrial = false)\nINFO  : Returning Hive schema: Schema(fieldSchemas:[FieldSchema(name:geo_enabled_count, type:bigint, comment:null)], properties:null)\nINFO  : Completed compiling command(queryId=osbdet_20201207233453_f9405e64-e343-4eda-ba4f-10acf4b6f324); Time taken: 1.05 seconds\nINFO  : Concurrency mode is disabled, not creating a lock manager\nINFO  : Executing command(queryId=osbdet_20201207233453_f9405e64-e343-4eda-ba4f-10acf4b6f324): select count(`user`) as geo_enabled_count from tweets_parquet where `user`.geo_enabled = true\nWARN  : Hive-on-MR is deprecated in Hive 2 and may not be available in the future versions. Consider using a different execution engine (i.e. spark, tez) or using Hive 1.X releases.\nINFO  : Query ID = osbdet_20201207233453_f9405e64-e343-4eda-ba4f-10acf4b6f324\nINFO  : Total jobs = 1\nINFO  : Launching Job 1 out of 1\nINFO  : Starting task [Stage-1:MAPRED] in serial mode\nINFO  : Number of reduce tasks determined at compile time: 1\nINFO  : In order to change the average load for a reducer (in bytes):\nINFO  :   set hive.exec.reducers.bytes.per.reducer=<number>\nINFO  : In order to limit the maximum number of reducers:\nINFO  :   set hive.exec.reducers.max=<number>\nINFO  : In order to set a constant number of reducers:\nINFO  :   set mapreduce.job.reduces=<number>\nINFO  : number of splits:1\nINFO  : Submitting tokens for job: job_1607379888334_0003\nINFO  : Executing with tokens: []\nINFO  : The url to track the job: http://localhost:8088/proxy/application_1607379888334_0003/\nINFO  : Starting Job = job_1607379888334_0003, Tracking URL = http://localhost:8088/proxy/application_1607379888334_0003/\nINFO  : Kill Command = /opt/hadoop/bin/mapred job  -kill job_1607379888334_0003\nINFO  : Hadoop job information for Stage-1: number of mappers: 1; number of reducers: 1\nINFO  : 2020-12-07 23:36:14,966 Stage-1 map = 0%,  reduce = 0%\nINFO  : 2020-12-07 23:36:33,666 Stage-1 map = 100%,  reduce = 0%, Cumulative CPU 6.26 sec\nINFO  : 2020-12-07 23:36:46,492 Stage-1 map = 100%,  reduce = 100%, Cumulative CPU 9.79 sec\nINFO  : MapReduce Total cumulative CPU time: 9 seconds 790 msec\nINFO  : Ended Job = job_1607379888334_0003\nINFO  : MapReduce Jobs Launched: \nINFO  : Stage-Stage-1: Map: 1  Reduce: 1   Cumulative CPU: 9.79 sec   HDFS Read: 16996 HDFS Write: 103 SUCCESS\nINFO  : Total MapReduce CPU Time Spent: 9 seconds 790 msec\nINFO  : Completed executing command(queryId=osbdet_20201207233453_f9405e64-e343-4eda-ba4f-10acf4b6f324); Time taken: 112.935 seconds\nINFO  : OK\nINFO  : Concurrency mode is disabled, not creating a lock manager\n"
+            "data": "INFO  : Compiling command(queryId=osbdet_20201210214238_dccf9af7-d114-4f52-b7b0-fc107a73516a): select count(*) from ( select `user`.screen_name from tweets_parquet where `user`.geo_enabled = true group by `user`.screen_name) a\nINFO  : Concurrency mode is disabled, not creating a lock manager\nINFO  : Semantic Analysis Completed (retrial = false)\nINFO  : Returning Hive schema: Schema(fieldSchemas:[FieldSchema(name:_c0, type:bigint, comment:null)], properties:null)\nINFO  : Completed compiling command(queryId=osbdet_20201210214238_dccf9af7-d114-4f52-b7b0-fc107a73516a); Time taken: 0.864 seconds\nINFO  : Concurrency mode is disabled, not creating a lock manager\nINFO  : Executing command(queryId=osbdet_20201210214238_dccf9af7-d114-4f52-b7b0-fc107a73516a): select count(*) from ( select `user`.screen_name from tweets_parquet where `user`.geo_enabled = true group by `user`.screen_name) a\nWARN  : Hive-on-MR is deprecated in Hive 2 and may not be available in the future versions. Consider using a different execution engine (i.e. spark, tez) or using Hive 1.X releases.\nINFO  : Query ID = osbdet_20201210214238_dccf9af7-d114-4f52-b7b0-fc107a73516a\nINFO  : Total jobs = 2\nINFO  : Launching Job 1 out of 2\nINFO  : Starting task [Stage-1:MAPRED] in serial mode\nINFO  : Number of reduce tasks not specified. Estimated from input data size: 1\nINFO  : In order to change the average load for a reducer (in bytes):\nINFO  :   set hive.exec.reducers.bytes.per.reducer=<number>\nINFO  : In order to limit the maximum number of reducers:\nINFO  :   set hive.exec.reducers.max=<number>\nINFO  : In order to set a constant number of reducers:\nINFO  :   set mapreduce.job.reduces=<number>\nINFO  : number of splits:1\nINFO  : Submitting tokens for job: job_1607631533546_0007\nINFO  : Executing with tokens: []\nINFO  : The url to track the job: http://localhost:8088/proxy/application_1607631533546_0007/\nINFO  : Starting Job = job_1607631533546_0007, Tracking URL = http://localhost:8088/proxy/application_1607631533546_0007/\nINFO  : Kill Command = /opt/hadoop/bin/mapred job  -kill job_1607631533546_0007\nINFO  : Hadoop job information for Stage-1: number of mappers: 1; number of reducers: 1\nINFO  : 2020-12-10 21:43:48,873 Stage-1 map = 0%,  reduce = 0%\nINFO  : 2020-12-10 21:44:07,498 Stage-1 map = 100%,  reduce = 0%, Cumulative CPU 6.27 sec\nINFO  : 2020-12-10 21:44:20,569 Stage-1 map = 100%,  reduce = 100%, Cumulative CPU 10.58 sec\nINFO  : MapReduce Total cumulative CPU time: 10 seconds 580 msec\nINFO  : Ended Job = job_1607631533546_0007\nINFO  : Launching Job 2 out of 2\nINFO  : Starting task [Stage-2:MAPRED] in serial mode\nINFO  : Number of reduce tasks determined at compile time: 1\nINFO  : In order to change the average load for a reducer (in bytes):\nINFO  :   set hive.exec.reducers.bytes.per.reducer=<number>\nINFO  : In order to limit the maximum number of reducers:\nINFO  :   set hive.exec.reducers.max=<number>\nINFO  : In order to set a constant number of reducers:\nINFO  :   set mapreduce.job.reduces=<number>\nINFO  : number of splits:1\nINFO  : Submitting tokens for job: job_1607631533546_0008\nINFO  : Executing with tokens: []\nINFO  : The url to track the job: http://localhost:8088/proxy/application_1607631533546_0008/\nINFO  : Starting Job = job_1607631533546_0008, Tracking URL = http://localhost:8088/proxy/application_1607631533546_0008/\nINFO  : Kill Command = /opt/hadoop/bin/mapred job  -kill job_1607631533546_0008\nINFO  : Hadoop job information for Stage-2: number of mappers: 1; number of reducers: 1\nINFO  : 2020-12-10 21:45:28,372 Stage-2 map = 0%,  reduce = 0%\nINFO  : 2020-12-10 21:45:45,506 Stage-2 map = 100%,  reduce = 0%, Cumulative CPU 4.89 sec\nINFO  : 2020-12-10 21:46:02,670 Stage-2 map = 100%,  reduce = 100%, Cumulative CPU 9.22 sec\nINFO  : MapReduce Total cumulative CPU time: 9 seconds 220 msec\nINFO  : Ended Job = job_1607631533546_0008\n"
           },
           {
             "type": "TABLE",
-            "data": "geo_enabled_count\n154\n"
+            "data": "_c0\n134\n"
           }
         ]
       },
@@ -763,8 +790,12 @@
           "group": "jdbc",
           "values": [
             {
-              "jobUrl": "http://localhost:8088/proxy/application_1607379888334_0003/",
-              "$$hashKey": "object:13967"
+              "jobUrl": "http://localhost:8088/proxy/application_1607631533546_0007/",
+              "$$hashKey": "object:1780"
+            },
+            {
+              "jobUrl": "http://localhost:8088/proxy/application_1607631533546_0008/",
+              "$$hashKey": "object:1781"
             }
           ],
           "interpreterSettingId": "hive"
@@ -774,10 +805,10 @@
       "jobName": "paragraph_1606570607687_1751464176",
       "id": "paragraph_1606570607687_1751464176",
       "dateCreated": "2020-11-28T14:36:47+0100",
-      "dateStarted": "2020-12-07T23:34:53+0100",
-      "dateFinished": "2020-12-07T23:36:47+0100",
+      "dateStarted": "2020-12-10T21:42:38+0100",
+      "dateFinished": "2020-12-10T21:46:12+0100",
       "status": "FINISHED",
-      "$$hashKey": "object:271"
+      "$$hashKey": "object:274"
     },
     {
       "text": "--Step 10\nselect lang, count(lang) as lang_count from tweets_parquet group by lang;",
@@ -851,7 +882,7 @@
           "values": [
             {
               "jobUrl": "http://localhost:8088/proxy/application_1607379888334_0004/",
-              "$$hashKey": "object:14064"
+              "$$hashKey": "object:1831"
             }
           ],
           "interpreterSettingId": "hive"
@@ -864,12 +895,12 @@
       "dateStarted": "2020-12-07T23:37:07+0100",
       "dateFinished": "2020-12-07T23:39:05+0100",
       "status": "FINISHED",
-      "$$hashKey": "object:272"
+      "$$hashKey": "object:275"
     },
     {
-      "text": "--Step 11\nselect `user`.screen_name, `user`.statuses_count  from tweets_parquet order by `user`.statuses_count desc limit 10;",
+      "text": "--Step 11\nselect  `user`.screen_name, max(`user`.statuses_count)  from tweets_parquet group by `user`.screen_name order by max(`user`.statuses_count) desc limit 10;",
       "user": "anonymous",
-      "dateUpdated": "2020-12-07T23:43:35+0100",
+      "dateUpdated": "2020-12-10T21:35:51+0100",
       "config": {
         "colWidth": 12,
         "fontSize": 9,
@@ -886,7 +917,35 @@
                   "tableColumnTypeState": {
                     "names": {
                       "screen_name": "string",
-                      "statuses_count": "string"
+                      "_c1": "string"
+                    },
+                    "updated": false
+                  },
+                  "tableOptionSpecHash": "[{\"name\":\"useFilter\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable filter for columns\"},{\"name\":\"showPagination\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable pagination for better navigation\"},{\"name\":\"showAggregationFooter\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable a footer for displaying aggregated values\"}]",
+                  "tableOptionValue": {
+                    "useFilter": false,
+                    "showPagination": false,
+                    "showAggregationFooter": false
+                  },
+                  "updated": false,
+                  "initialized": false
+                }
+              },
+              "commonSetting": {}
+            }
+          },
+          "2": {
+            "graph": {
+              "mode": "table",
+              "height": 300,
+              "optionOpen": false,
+              "setting": {
+                "table": {
+                  "tableGridState": {},
+                  "tableColumnTypeState": {
+                    "names": {
+                      "screen_name": "string",
+                      "_c1": "string"
                     },
                     "updated": false
                   },
@@ -920,11 +979,15 @@
         "msg": [
           {
             "type": "TEXT",
-            "data": "INFO  : Compiling command(queryId=osbdet_20201207234336_32389a63-08c7-49c7-909b-5605b43cc290): select `user`.screen_name, `user`.statuses_count  from tweets_parquet order by `user`.statuses_count desc limit 10\nINFO  : Concurrency mode is disabled, not creating a lock manager\nINFO  : Semantic Analysis Completed (retrial = false)\nINFO  : Returning Hive schema: Schema(fieldSchemas:[FieldSchema(name:screen_name, type:string, comment:null), FieldSchema(name:statuses_count, type:int, comment:null)], properties:null)\nINFO  : Completed compiling command(queryId=osbdet_20201207234336_32389a63-08c7-49c7-909b-5605b43cc290); Time taken: 0.956 seconds\nINFO  : Concurrency mode is disabled, not creating a lock manager\nINFO  : Executing command(queryId=osbdet_20201207234336_32389a63-08c7-49c7-909b-5605b43cc290): select `user`.screen_name, `user`.statuses_count  from tweets_parquet order by `user`.statuses_count desc limit 10\nWARN  : Hive-on-MR is deprecated in Hive 2 and may not be available in the future versions. Consider using a different execution engine (i.e. spark, tez) or using Hive 1.X releases.\nINFO  : Query ID = osbdet_20201207234336_32389a63-08c7-49c7-909b-5605b43cc290\nINFO  : Total jobs = 1\nINFO  : Launching Job 1 out of 1\nINFO  : Starting task [Stage-1:MAPRED] in serial mode\nINFO  : Number of reduce tasks determined at compile time: 1\nINFO  : In order to change the average load for a reducer (in bytes):\nINFO  :   set hive.exec.reducers.bytes.per.reducer=<number>\nINFO  : In order to limit the maximum number of reducers:\nINFO  :   set hive.exec.reducers.max=<number>\nINFO  : In order to set a constant number of reducers:\nINFO  :   set mapreduce.job.reduces=<number>\nINFO  : number of splits:1\nINFO  : Submitting tokens for job: job_1607379888334_0005\nINFO  : Executing with tokens: []\nINFO  : The url to track the job: http://localhost:8088/proxy/application_1607379888334_0005/\nINFO  : Starting Job = job_1607379888334_0005, Tracking URL = http://localhost:8088/proxy/application_1607379888334_0005/\nINFO  : Kill Command = /opt/hadoop/bin/mapred job  -kill job_1607379888334_0005\nINFO  : Hadoop job information for Stage-1: number of mappers: 1; number of reducers: 1\nINFO  : 2020-12-07 23:44:49,163 Stage-1 map = 0%,  reduce = 0%\nINFO  : 2020-12-07 23:45:07,666 Stage-1 map = 100%,  reduce = 0%, Cumulative CPU 5.97 sec\nINFO  : 2020-12-07 23:45:21,508 Stage-1 map = 100%,  reduce = 100%, Cumulative CPU 9.13 sec\nINFO  : MapReduce Total cumulative CPU time: 9 seconds 130 msec\nINFO  : Ended Job = job_1607379888334_0005\nINFO  : MapReduce Jobs Launched: \nINFO  : Stage-Stage-1: Map: 1  Reduce: 1   Cumulative CPU: 9.13 sec   HDFS Read: 23620 HDFS Write: 420 SUCCESS\nINFO  : Total MapReduce CPU Time Spent: 9 seconds 130 msec\nINFO  : Completed executing command(queryId=osbdet_20201207234336_32389a63-08c7-49c7-909b-5605b43cc290); Time taken: 105.216 seconds\nINFO  : OK\nINFO  : Concurrency mode is disabled, not creating a lock manager\n"
+            "data": "Query executed successfully. Affected rows : -1\n"
+          },
+          {
+            "type": "TEXT",
+            "data": "Query executed successfully. Affected rows : -1INFO  : Compiling command(queryId=osbdet_20201210212217_d3063d54-eaf2-4232-bf5b-6ee5227bcb34): select  `user`.screen_name, max(`user`.statuses_count)  from tweets_parquet group by `user`.screen_name order by max(`user`.statuses_count) desc limit 10\nINFO  : Concurrency mode is disabled, not creating a lock manager\nINFO  : Semantic Analysis Completed (retrial = false)\nINFO  : Returning Hive schema: Schema(fieldSchemas:[FieldSchema(name:user.screen_name, type:string, comment:null), FieldSchema(name:_c1, type:int, comment:null)], properties:null)\nINFO  : Completed compiling command(queryId=osbdet_20201210212217_d3063d54-eaf2-4232-bf5b-6ee5227bcb34); Time taken: 8.022 seconds\nINFO  : Concurrency mode is disabled, not creating a lock manager\nINFO  : Executing command(queryId=osbdet_20201210212217_d3063d54-eaf2-4232-bf5b-6ee5227bcb34): select  `user`.screen_name, max(`user`.statuses_count)  from tweets_parquet group by `user`.screen_name order by max(`user`.statuses_count) desc limit 10\nWARN  : Hive-on-MR is deprecated in Hive 2 and may not be available in the future versions. Consider using a different execution engine (i.e. spark, tez) or using Hive 1.X releases.\nINFO  : Query ID = osbdet_20201210212217_d3063d54-eaf2-4232-bf5b-6ee5227bcb34\nINFO  : Total jobs = 2\nINFO  : Launching Job 1 out of 2\nINFO  : Starting task [Stage-1:MAPRED] in serial mode\nINFO  : Number of reduce tasks not specified. Estimated from input data size: 1\nINFO  : In order to change the average load for a reducer (in bytes):\nINFO  :   set hive.exec.reducers.bytes.per.reducer=<number>\nINFO  : In order to limit the maximum number of reducers:\nINFO  :   set hive.exec.reducers.max=<number>\nINFO  : In order to set a constant number of reducers:\nINFO  :   set mapreduce.job.reduces=<number>\nINFO  : number of splits:1\nINFO  : Submitting tokens for job: job_1607631533546_0001\nINFO  : Executing with tokens: []\nINFO  : The url to track the job: http://localhost:8088/proxy/application_1607631533546_0001/\nINFO  : Starting Job = job_1607631533546_0001, Tracking URL = http://localhost:8088/proxy/application_1607631533546_0001/\nINFO  : Kill Command = /opt/hadoop/bin/mapred job  -kill job_1607631533546_0001\nINFO  : Hadoop job information for Stage-1: number of mappers: 1; number of reducers: 1\nINFO  : 2020-12-10 21:24:30,106 Stage-1 map = 0%,  reduce = 0%\nINFO  : 2020-12-10 21:24:49,479 Stage-1 map = 100%,  reduce = 0%, Cumulative CPU 4.97 sec\nINFO  : 2020-12-10 21:25:01,685 Stage-1 map = 100%,  reduce = 100%, Cumulative CPU 7.97 sec\nINFO  : MapReduce Total cumulative CPU time: 7 seconds 970 msec\nINFO  : Ended Job = job_1607631533546_0001\nINFO  : Launching Job 2 out of 2\nINFO  : Starting task [Stage-2:MAPRED] in serial mode\nINFO  : Number of reduce tasks determined at compile time: 1\nINFO  : In order to change the average load for a reducer (in bytes):\nINFO  :   set hive.exec.reducers.bytes.per.reducer=<number>\nINFO  : In order to limit the maximum number of reducers:\nINFO  :   set hive.exec.reducers.max=<number>\nINFO  : In order to set a constant number of reducers:\nINFO  :   set mapreduce.job.reduces=<number>\nINFO  : number of splits:1\nINFO  : Submitting tokens for job: job_1607631533546_0002\nINFO  : Executing with tokens: []\nINFO  : The url to track the job: http://localhost:8088/proxy/application_1607631533546_0002/\nINFO  : Starting Job = job_1607631533546_0002, Tracking URL = http://localhost:8088/proxy/application_1607631533546_0002/\nINFO  : Kill Command = /opt/hadoop/bin/mapred job  -kill job_1607631533546_0002\nINFO  : Hadoop job information for Stage-2: number of mappers: 1; number of reducers: 1\nINFO  : 2020-12-10 21:26:16,116 Stage-2 map = 0%,  reduce = 0%\nINFO  : 2020-12-10 21:26:37,060 Stage-2 map = 100%,  reduce = 0%, Cumulative CPU 6.96 sec\nINFO  : 2020-12-10 21:26:58,404 Stage-2 map = 100%,  reduce = 100%, Cumulative CPU 14.95 sec\nINFO  : MapReduce Total cumulative CPU time: 14 seconds 950 msec\nINFO  : Ended Job = job_1607631533546_0002\nINFO  : MapReduce Jobs Launched: \nINFO  : Stage-Stage-1: Map: 1  Reduce: 1   Cumulative CPU: 7.97 sec   HDFS Read: 23467 HDFS Write: 11456 SUCCESS\nINFO  : Stage-Stage-2: Map: 1  Reduce: 1   Cumulative CPU: 14.95 sec   HDFS Read: 18934 HDFS Write: 412 SUCCESS\nINFO  : Total MapReduce CPU Time Spent: 22 seconds 920 msec\nINFO  : Completed executing command(queryId=osbdet_20201210212217_d3063d54-eaf2-4232-bf5b-6ee5227bcb34); Time taken: 275.338 seconds\nINFO  : OK\nINFO  : Concurrency mode is disabled, not creating a lock manager\n"
           },
           {
             "type": "TABLE",
-            "data": "screen_name\tstatuses_count\nnerdyflow\t554232\nJohnApp63499667\t481721\nFORKSTER_2013\t313643\nsian_evans_xx\t298674\nDnDClericHorgar\t280803\nPeriodicoHoy\t267102\nAngeloR54671811\t260318\nAngeloR54671811\t260317\nAngeloR54671811\t260315\nwireradiouk\t171048\n"
+            "data": "screen_name\t_c1\nnerdyflow\t554232\nJohnApp63499667\t481721\nFORKSTER_2013\t313643\nsian_evans_xx\t298674\nDnDClericHorgar\t280803\nPeriodicoHoy\t267102\nAngeloR54671811\t260318\nwireradiouk\t171048\nCreat1ve\t169086\npriyanka_twt19\t167103\n"
           }
         ]
       },
@@ -937,8 +1000,12 @@
           "group": "jdbc",
           "values": [
             {
-              "jobUrl": "http://localhost:8088/proxy/application_1607379888334_0005/",
-              "$$hashKey": "object:14859"
+              "jobUrl": "http://localhost:8088/proxy/application_1607631533546_0001/",
+              "$$hashKey": "object:1877"
+            },
+            {
+              "jobUrl": "http://localhost:8088/proxy/application_1607631533546_0002/",
+              "$$hashKey": "object:1878"
             }
           ],
           "interpreterSettingId": "hive"
@@ -948,15 +1015,15 @@
       "jobName": "paragraph_1606570555918_2005095609",
       "id": "paragraph_1606570555918_2005095609",
       "dateCreated": "2020-11-28T14:35:55+0100",
-      "dateStarted": "2020-12-07T23:43:36+0100",
-      "dateFinished": "2020-12-07T23:45:26+0100",
+      "dateStarted": "2020-12-10T21:22:06+0100",
+      "dateFinished": "2020-12-10T21:27:02+0100",
       "status": "FINISHED",
-      "$$hashKey": "object:273"
+      "$$hashKey": "object:276"
     },
     {
-      "text": "--Step 12\nselect `user`.screen_name, `user`.followers_count from tweets_parquet order by `user`.followers_count desc limit 10;",
+      "text": "\n--Step 12\nselect `user`.screen_name, max(`user`.followers_count) from tweets_parquet group by `user`.screen_name order by max(`user`.followers_count) desc limit 10;",
       "user": "anonymous",
-      "dateUpdated": "2020-12-07T23:46:08+0100",
+      "dateUpdated": "2020-12-10T21:40:56+0100",
       "config": {
         "colWidth": 12,
         "fontSize": 9,
@@ -973,7 +1040,7 @@
                   "tableColumnTypeState": {
                     "names": {
                       "screen_name": "string",
-                      "followers_count": "string"
+                      "_c1": "string"
                     },
                     "updated": false
                   },
@@ -1007,11 +1074,11 @@
         "msg": [
           {
             "type": "TEXT",
-            "data": "INFO  : Compiling command(queryId=osbdet_20201207234609_ee87d7fc-e233-4cdf-bc40-e4d295f3cd77): select `user`.screen_name, `user`.followers_count from tweets_parquet order by `user`.followers_count desc limit 10\nINFO  : Concurrency mode is disabled, not creating a lock manager\nINFO  : Semantic Analysis Completed (retrial = false)\nINFO  : Returning Hive schema: Schema(fieldSchemas:[FieldSchema(name:screen_name, type:string, comment:null), FieldSchema(name:followers_count, type:int, comment:null)], properties:null)\nINFO  : Completed compiling command(queryId=osbdet_20201207234609_ee87d7fc-e233-4cdf-bc40-e4d295f3cd77); Time taken: 0.476 seconds\nINFO  : Concurrency mode is disabled, not creating a lock manager\nINFO  : Executing command(queryId=osbdet_20201207234609_ee87d7fc-e233-4cdf-bc40-e4d295f3cd77): select `user`.screen_name, `user`.followers_count from tweets_parquet order by `user`.followers_count desc limit 10\nWARN  : Hive-on-MR is deprecated in Hive 2 and may not be available in the future versions. Consider using a different execution engine (i.e. spark, tez) or using Hive 1.X releases.\nINFO  : Query ID = osbdet_20201207234609_ee87d7fc-e233-4cdf-bc40-e4d295f3cd77\nINFO  : Total jobs = 1\nINFO  : Launching Job 1 out of 1\nINFO  : Starting task [Stage-1:MAPRED] in serial mode\nINFO  : Number of reduce tasks determined at compile time: 1\nINFO  : In order to change the average load for a reducer (in bytes):\nINFO  :   set hive.exec.reducers.bytes.per.reducer=<number>\nINFO  : In order to limit the maximum number of reducers:\nINFO  :   set hive.exec.reducers.max=<number>\nINFO  : In order to set a constant number of reducers:\nINFO  :   set mapreduce.job.reduces=<number>\nINFO  : number of splits:1\nINFO  : Submitting tokens for job: job_1607379888334_0006\nINFO  : Executing with tokens: []\nINFO  : The url to track the job: http://localhost:8088/proxy/application_1607379888334_0006/\nINFO  : Starting Job = job_1607379888334_0006, Tracking URL = http://localhost:8088/proxy/application_1607379888334_0006/\nINFO  : Kill Command = /opt/hadoop/bin/mapred job  -kill job_1607379888334_0006\nINFO  : Hadoop job information for Stage-1: number of mappers: 1; number of reducers: 1\nINFO  : 2020-12-07 23:47:01,124 Stage-1 map = 0%,  reduce = 0%\nINFO  : 2020-12-07 23:47:21,676 Stage-1 map = 100%,  reduce = 0%, Cumulative CPU 10.53 sec\nINFO  : 2020-12-07 23:47:48,818 Stage-1 map = 100%,  reduce = 100%, Cumulative CPU 20.19 sec\nINFO  : MapReduce Total cumulative CPU time: 20 seconds 190 msec\nINFO  : Ended Job = job_1607379888334_0006\nINFO  : MapReduce Jobs Launched: \nINFO  : Stage-Stage-1: Map: 1  Reduce: 1   Cumulative CPU: 20.19 sec   HDFS Read: 23350 HDFS Write: 388 SUCCESS\nINFO  : Total MapReduce CPU Time Spent: 20 seconds 190 msec\nINFO  : Completed executing command(queryId=osbdet_20201207234609_ee87d7fc-e233-4cdf-bc40-e4d295f3cd77); Time taken: 101.011 seconds\nINFO  : OK\nINFO  : Concurrency mode is disabled, not creating a lock manager\n"
+            "data": "INFO  : Compiling command(queryId=osbdet_20201210213704_b178025e-a4ac-4b1b-8185-670c192d252c): select `user`.screen_name, max(`user`.followers_count) from tweets_parquet group by `user`.screen_name order by max(`user`.followers_count) desc limit 10\nINFO  : Concurrency mode is disabled, not creating a lock manager\nINFO  : Semantic Analysis Completed (retrial = false)\nINFO  : Returning Hive schema: Schema(fieldSchemas:[FieldSchema(name:user.screen_name, type:string, comment:null), FieldSchema(name:_c1, type:int, comment:null)], properties:null)\nINFO  : Completed compiling command(queryId=osbdet_20201210213704_b178025e-a4ac-4b1b-8185-670c192d252c); Time taken: 1.41 seconds\nINFO  : Concurrency mode is disabled, not creating a lock manager\nINFO  : Executing command(queryId=osbdet_20201210213704_b178025e-a4ac-4b1b-8185-670c192d252c): select `user`.screen_name, max(`user`.followers_count) from tweets_parquet group by `user`.screen_name order by max(`user`.followers_count) desc limit 10\nWARN  : Hive-on-MR is deprecated in Hive 2 and may not be available in the future versions. Consider using a different execution engine (i.e. spark, tez) or using Hive 1.X releases.\nINFO  : Query ID = osbdet_20201210213704_b178025e-a4ac-4b1b-8185-670c192d252c\nINFO  : Total jobs = 2\nINFO  : Launching Job 1 out of 2\nINFO  : Starting task [Stage-1:MAPRED] in serial mode\nINFO  : Number of reduce tasks not specified. Estimated from input data size: 1\nINFO  : In order to change the average load for a reducer (in bytes):\nINFO  :   set hive.exec.reducers.bytes.per.reducer=<number>\nINFO  : In order to limit the maximum number of reducers:\nINFO  :   set hive.exec.reducers.max=<number>\nINFO  : In order to set a constant number of reducers:\nINFO  :   set mapreduce.job.reduces=<number>\nINFO  : number of splits:1\nINFO  : Submitting tokens for job: job_1607631533546_0005\nINFO  : Executing with tokens: []\nINFO  : The url to track the job: http://localhost:8088/proxy/application_1607631533546_0005/\nINFO  : Starting Job = job_1607631533546_0005, Tracking URL = http://localhost:8088/proxy/application_1607631533546_0005/\nINFO  : Kill Command = /opt/hadoop/bin/mapred job  -kill job_1607631533546_0005\nINFO  : Hadoop job information for Stage-1: number of mappers: 1; number of reducers: 1\nINFO  : 2020-12-10 21:38:20,144 Stage-1 map = 0%,  reduce = 0%\nINFO  : 2020-12-10 21:38:41,350 Stage-1 map = 100%,  reduce = 0%, Cumulative CPU 6.13 sec\nINFO  : 2020-12-10 21:38:59,703 Stage-1 map = 100%,  reduce = 100%, Cumulative CPU 11.09 sec\nINFO  : MapReduce Total cumulative CPU time: 11 seconds 90 msec\nINFO  : Ended Job = job_1607631533546_0005\nINFO  : Launching Job 2 out of 2\nINFO  : Starting task [Stage-2:MAPRED] in serial mode\nINFO  : Number of reduce tasks determined at compile time: 1\nINFO  : In order to change the average load for a reducer (in bytes):\nINFO  :   set hive.exec.reducers.bytes.per.reducer=<number>\nINFO  : In order to limit the maximum number of reducers:\nINFO  :   set hive.exec.reducers.max=<number>\nINFO  : In order to set a constant number of reducers:\nINFO  :   set mapreduce.job.reduces=<number>\nINFO  : number of splits:1\nINFO  : Submitting tokens for job: job_1607631533546_0006\nINFO  : Executing with tokens: []\nINFO  : The url to track the job: http://localhost:8088/proxy/application_1607631533546_0006/\nINFO  : Starting Job = job_1607631533546_0006, Tracking URL = http://localhost:8088/proxy/application_1607631533546_0006/\nINFO  : Kill Command = /opt/hadoop/bin/mapred job  -kill job_1607631533546_0006\nINFO  : Hadoop job information for Stage-2: number of mappers: 1; number of reducers: 1\nINFO  : 2020-12-10 21:40:13,672 Stage-2 map = 0%,  reduce = 0%\nINFO  : 2020-12-10 21:40:32,045 Stage-2 map = 100%,  reduce = 0%, Cumulative CPU 3.9 sec\nINFO  : 2020-12-10 21:40:52,500 Stage-2 map = 100%,  reduce = 100%, Cumulative CPU 9.94 sec\nINFO  : MapReduce Total cumulative CPU time: 9 seconds 940 msec\nINFO  : Ended Job = job_1607631533546_0006\nINFO  : MapReduce Jobs Launched: \nINFO  : Stage-Stage-1: Map: 1  Reduce: 1   Cumulative CPU: 11.09 sec   HDFS Read: 23348 HDFS Write: 11239 SUCCESS\nINFO  : Stage-Stage-2: Map: 1  Reduce: 1   Cumulative CPU: 9.94 sec   HDFS Read: 18717 HDFS Write: 388 SUCCESS\nINFO  : Total MapReduce CPU Time Spent: 21 seconds 30 msec\nINFO  : Completed executing command(queryId=osbdet_20201210213704_b178025e-a4ac-4b1b-8185-670c192d252c); Time taken: 228.442 seconds\nINFO  : OK\nINFO  : Concurrency mode is disabled, not creating a lock manager\n"
           },
           {
             "type": "TABLE",
-            "data": "screen_name\tfollowers_count\nferhatgocer\t2304938\nPeriodicoHoy\t711325\nHollyscoop\t276944\nKaelahMickelle\t73996\nwavwax\t66479\nPOWER1079\t51842\nClaude_Sarraute\t26677\ncyrus_zei\t23163\nPauta_cl\t21664\nFORKSTER_2013\t17829\n"
+            "data": "screen_name\t_c1\nferhatgocer\t2304938\nPeriodicoHoy\t711325\nHollyscoop\t276944\nKaelahMickelle\t73996\nwavwax\t66479\nPOWER1079\t51842\nClaude_Sarraute\t26677\ncyrus_zei\t23163\nPauta_cl\t21664\nFORKSTER_2013\t17829\n"
           }
         ]
       },
@@ -1024,8 +1091,12 @@
           "group": "jdbc",
           "values": [
             {
-              "jobUrl": "http://localhost:8088/proxy/application_1607379888334_0006/",
-              "$$hashKey": "object:15017"
+              "jobUrl": "http://localhost:8088/proxy/application_1607631533546_0005/",
+              "$$hashKey": "object:1928"
+            },
+            {
+              "jobUrl": "http://localhost:8088/proxy/application_1607631533546_0006/",
+              "$$hashKey": "object:1929"
             }
           ],
           "interpreterSettingId": "hive"
@@ -1035,15 +1106,15 @@
       "jobName": "paragraph_1606571176664_510478110",
       "id": "paragraph_1606571176664_510478110",
       "dateCreated": "2020-11-28T14:46:16+0100",
-      "dateStarted": "2020-12-07T23:46:09+0100",
-      "dateFinished": "2020-12-07T23:47:51+0100",
+      "dateStarted": "2020-12-10T21:37:04+0100",
+      "dateFinished": "2020-12-10T21:40:55+0100",
       "status": "FINISHED",
-      "$$hashKey": "object:274"
+      "$$hashKey": "object:277"
     },
     {
       "text": "--Step 13\nselect hashtag, count(hashtag) as count from tweets_parquet lateral view explode(`entities`.`hashtags`.text) d as hashtag group by hashtag order by count desc limit 10;",
       "user": "anonymous",
-      "dateUpdated": "2020-12-02T20:33:57+0100",
+      "dateUpdated": "2020-12-10T14:49:51+0100",
       "config": {
         "colWidth": 12,
         "fontSize": 9,
@@ -1161,11 +1232,11 @@
           "values": [
             {
               "jobUrl": "http://localhost:8088/proxy/application_1606933598055_0005/",
-              "$$hashKey": "object:1959"
+              "$$hashKey": "object:1979"
             },
             {
               "jobUrl": "http://localhost:8088/proxy/application_1606933598055_0006/",
-              "$$hashKey": "object:1960"
+              "$$hashKey": "object:1980"
             }
           ],
           "interpreterSettingId": "hive"
@@ -1178,12 +1249,12 @@
       "dateStarted": "2020-12-02T20:33:57+0100",
       "dateFinished": "2020-12-02T20:37:53+0100",
       "status": "FINISHED",
-      "$$hashKey": "object:275"
+      "$$hashKey": "object:278"
     },
     {
       "text": "--Step 14\nselect text, (LENGTH(text) - LENGTH(REPLACE(text, ' ', ''))) as word_count from tweets_parquet;",
       "user": "anonymous",
-      "dateUpdated": "2020-12-07T23:50:04+0100",
+      "dateUpdated": "2020-12-10T21:45:42+0100",
       "config": {
         "colWidth": 12,
         "fontSize": 9,
@@ -1247,12 +1318,12 @@
       "dateStarted": "2020-12-07T23:50:05+0100",
       "dateFinished": "2020-12-07T23:50:12+0100",
       "status": "FINISHED",
-      "$$hashKey": "object:276"
+      "$$hashKey": "object:279"
     },
     {
       "text": "--Step 14\nselect ROUND(AVG((LENGTH(text) - LENGTH(REPLACE(text, ' ', '')))), 2) as two_decimal_average_word_count from tweets_parquet;",
       "user": "anonymous",
-      "dateUpdated": "2020-11-29T15:19:08+0100",
+      "dateUpdated": "2020-12-10T21:45:53+0100",
       "config": {
         "colWidth": 12,
         "fontSize": 9,
@@ -1348,7 +1419,7 @@
           "values": [
             {
               "jobUrl": "http://localhost:8088/proxy/application_1606651607676_0018/",
-              "$$hashKey": "object:2050"
+              "$$hashKey": "object:2070"
             }
           ],
           "interpreterSettingId": "hive"
@@ -1361,7 +1432,7 @@
       "dateStarted": "2020-11-29T15:17:26+0100",
       "dateFinished": "2020-11-29T15:19:07+0100",
       "status": "FINISHED",
-      "$$hashKey": "object:277"
+      "$$hashKey": "object:280"
     },
     {
       "text": "--Step 15\nselect max(size(`entities`.`hashtags`))  as max_number_hashtags, round(avg(size(`entities`.`hashtags`)), 2) as average_number_hashtags from tweets_parquet;",
@@ -1462,7 +1533,7 @@
           "values": [
             {
               "jobUrl": "http://localhost:8088/proxy/application_1607379888334_0009/",
-              "$$hashKey": "object:15922"
+              "$$hashKey": "object:2116"
             }
           ],
           "interpreterSettingId": "hive"
@@ -1475,12 +1546,12 @@
       "dateStarted": "2020-12-07T23:55:12+0100",
       "dateFinished": "2020-12-07T23:57:06+0100",
       "status": "FINISHED",
-      "$$hashKey": "object:278"
+      "$$hashKey": "object:281"
     },
     {
-      "text": "--Step 16\nselect screen_name, count(screen_name) as count from tweets_parquet lateral view explode(`entities`.`user_mentions`.screen_name) d as screen_name group by screen_name order by count desc limit 10;",
+      "text": "--Step 16\nselect screen_name, count(screen_name) as user_mentions_count from tweets_parquet lateral view explode(`entities`.`user_mentions`.screen_name) d as screen_name group by screen_name order by count(screen_name) desc limit 10;",
       "user": "anonymous",
-      "dateUpdated": "2020-12-07T23:50:30+0100",
+      "dateUpdated": "2020-12-10T21:52:23+0100",
       "config": {
         "colWidth": 12,
         "fontSize": 9,
@@ -1612,11 +1683,11 @@
           "values": [
             {
               "jobUrl": "http://localhost:8088/proxy/application_1607379888334_0007/",
-              "$$hashKey": "object:15783"
+              "$$hashKey": "object:2162"
             },
             {
               "jobUrl": "http://localhost:8088/proxy/application_1607379888334_0008/",
-              "$$hashKey": "object:15784"
+              "$$hashKey": "object:2163"
             }
           ],
           "interpreterSettingId": "hive"
@@ -1629,7 +1700,7 @@
       "dateStarted": "2020-12-07T23:50:31+0100",
       "dateFinished": "2020-12-07T23:53:59+0100",
       "status": "FINISHED",
-      "$$hashKey": "object:279"
+      "$$hashKey": "object:282"
     },
     {
       "text": "--Temp\nSELECT id, lower(word) FROM tweets_parquet LATERAL VIEW explode(split(text, ' ')) lTable as word where word != \"\"",
@@ -1698,7 +1769,7 @@
       "dateStarted": "2020-12-02T20:38:17+0100",
       "dateFinished": "2020-12-02T20:38:18+0100",
       "status": "FINISHED",
-      "$$hashKey": "object:280"
+      "$$hashKey": "object:283"
     },
     {
       "text": "--Step 17\ndrop table if exists tweet_words;\ncreate table tweet_words(created_at string, id bigint, word string) stored AS orc ;",
@@ -1799,7 +1870,7 @@
       "dateStarted": "2020-12-07T23:58:01+0100",
       "dateFinished": "2020-12-07T23:58:02+0100",
       "status": "FINISHED",
-      "$$hashKey": "object:281"
+      "$$hashKey": "object:284"
     },
     {
       "text": "--Step 17\nINSERT INTO TABLE tweet_words (SELECT created_at, id, lower(word) FROM tweets_parquet LATERAL VIEW explode(split(text, ' ')) lTable as word where word != \"\");",
@@ -1844,7 +1915,7 @@
           "values": [
             {
               "jobUrl": "http://localhost:8088/proxy/application_1607379888334_0010/",
-              "$$hashKey": "object:16265"
+              "$$hashKey": "object:2293"
             }
           ],
           "interpreterSettingId": "hive"
@@ -1857,7 +1928,7 @@
       "dateStarted": "2020-12-07T23:58:07+0100",
       "dateFinished": "2020-12-07T23:59:52+0100",
       "status": "FINISHED",
-      "$$hashKey": "object:282"
+      "$$hashKey": "object:285"
     },
     {
       "text": "--Temp\nselect * from tweet_words;",
@@ -1927,7 +1998,7 @@
       "dateStarted": "2020-12-08T00:01:14+0100",
       "dateFinished": "2020-12-08T00:01:15+0100",
       "status": "FINISHED",
-      "$$hashKey": "object:283"
+      "$$hashKey": "object:286"
     },
     {
       "text": "--Temp\nselect tweet_words.created_at, tweet_words.id, tweet_words.word, case when sentiment_dictionary.polarity = 'positive' then 1\n     when sentiment_dictionary.polarity = 'negative' then -1\n     else 0\nend as polarity from tweet_words left join sentiment_dictionary on tweet_words.word = sentiment_dictionary.word;",
@@ -1956,7 +2027,7 @@
       "id": "paragraph_1606662462189_1073608831",
       "dateCreated": "2020-11-29T16:07:42+0100",
       "status": "READY",
-      "$$hashKey": "object:284"
+      "$$hashKey": "object:287"
     },
     {
       "text": "--Step 18\ndrop table if exists tweet_words_sentiment;\ncreate table tweet_words_sentiment stored as parquet as\n(select tweet_words.created_at, tweet_words.id, tweet_words.word, case when sentiment_dictionary.polarity = 'positive' then 1\n                                               when sentiment_dictionary.polarity = 'negative' then -1\n                                               else 0\n                                               end as polarity \nfrom tweet_words left join sentiment_dictionary on tweet_words.word = sentiment_dictionary.word);",
@@ -2001,7 +2072,7 @@
           "values": [
             {
               "jobUrl": "http://localhost:8088/proxy/application_1607379888334_0011/",
-              "$$hashKey": "object:16951"
+              "$$hashKey": "object:2419"
             }
           ],
           "interpreterSettingId": "hive"
@@ -2014,7 +2085,7 @@
       "dateStarted": "2020-12-08T00:01:21+0100",
       "dateFinished": "2020-12-08T00:02:58+0100",
       "status": "FINISHED",
-      "$$hashKey": "object:285"
+      "$$hashKey": "object:288"
     },
     {
       "text": "--Temp\nselect created_at, id, word from tweet_words_sentiment;",
@@ -2132,7 +2203,7 @@
       "dateStarted": "2020-12-08T00:04:14+0100",
       "dateFinished": "2020-12-08T00:04:15+0100",
       "status": "FINISHED",
-      "$$hashKey": "object:286"
+      "$$hashKey": "object:289"
     },
     {
       "text": "--Temp\nselect created_at, id, case when sum(polarity) > 0 then 'positive'\n                when sum(polarity) < 0 then 'negative'\n                else 'neutral'\n                end as polarity\nfrom tweet_words_sentiment\ngroup by id",
@@ -2238,7 +2309,7 @@
           "values": [
             {
               "jobUrl": "http://localhost:8088/proxy/application_1606651607676_0034/",
-              "$$hashKey": "object:2485"
+              "$$hashKey": "object:2505"
             }
           ],
           "interpreterSettingId": "hive"
@@ -2251,7 +2322,7 @@
       "dateStarted": "2020-11-29T16:15:42+0100",
       "dateFinished": "2020-11-29T16:17:02+0100",
       "status": "FINISHED",
-      "$$hashKey": "object:287"
+      "$$hashKey": "object:290"
     },
     {
       "text": "--Step 19\ndrop table if exists tweets_sentiment;\ncreate table tweets_sentiment stored as parquet as (select id, case when sum(polarity) > 0 then 'positive'\n     when sum(polarity) < 0 then 'negative'\n     else 'neutral'\nend as polarity\nfrom tweet_words_sentiment\ngroup by id);",
@@ -2296,7 +2367,7 @@
           "values": [
             {
               "jobUrl": "http://localhost:8088/proxy/application_1607379888334_0012/",
-              "$$hashKey": "object:18411"
+              "$$hashKey": "object:2551"
             }
           ],
           "interpreterSettingId": "hive"
@@ -2309,7 +2380,7 @@
       "dateStarted": "2020-12-08T00:04:31+0100",
       "dateFinished": "2020-12-08T00:06:28+0100",
       "status": "FINISHED",
-      "$$hashKey": "object:288"
+      "$$hashKey": "object:291"
     },
     {
       "text": "--Temp\nselect * from tweets_sentiment;",
@@ -2378,7 +2449,7 @@
       "dateStarted": "2020-12-08T00:06:35+0100",
       "dateFinished": "2020-12-08T00:06:37+0100",
       "status": "FINISHED",
-      "$$hashKey": "object:289"
+      "$$hashKey": "object:292"
     },
     {
       "text": "--Step 20 / creating macro\ncreate temporary MACRO tweet_hour(created_at string) from_unixtime(unix_timestamp(created_at,\n'EEE MMM dd HH:mm:ss ZZZZZ yyyy'), 'yyyyMMddHH');",
@@ -2418,7 +2489,7 @@
       "dateStarted": "2020-12-08T00:07:09+0100",
       "dateFinished": "2020-12-08T00:07:10+0100",
       "status": "FINISHED",
-      "$$hashKey": "object:290"
+      "$$hashKey": "object:293"
     },
     {
       "text": "--Step 20\nSELECT\ntweet_hour(created_at) as hour,\ncount(case when polarity > 0 then 1 end) as positive,\ncount(case when polarity < 0 then 1 end) as negative,\ncount(case when polarity = 0 then 1 end) as neutral\nFROM tweet_words_sentiment\nGROUP BY tweet_hour(created_at)\n",
@@ -2521,7 +2592,7 @@
           "values": [
             {
               "jobUrl": "http://localhost:8088/proxy/application_1607379888334_0013/",
-              "$$hashKey": "object:19199"
+              "$$hashKey": "object:2677"
             }
           ],
           "interpreterSettingId": "hive"
@@ -2534,7 +2605,7 @@
       "dateStarted": "2020-12-08T00:07:14+0100",
       "dateFinished": "2020-12-08T00:08:37+0100",
       "status": "FINISHED",
-      "$$hashKey": "object:291"
+      "$$hashKey": "object:294"
     },
     {
       "text": "--Temp\nselect * from tweet_words_sentiment;",
@@ -2563,7 +2634,7 @@
       "id": "paragraph_1606664466913_1713851091",
       "dateCreated": "2020-11-29T16:41:06+0100",
       "status": "READY",
-      "$$hashKey": "object:292"
+      "$$hashKey": "object:295"
     }
   ],
   "name": "2020s1_goktug_asci",
