@@ -1,9 +1,9 @@
 ﻿{
   "paragraphs": [
     {
-      "text": "--Step 1 / I activated Nifi (data ingestion) for 5 minutes on #Israel\ndrop database if exists 2020s1_goktug_asci cascade;\ncreate database 2020s1_goktug_asci;\n--Step 2\nuse 2020s1_goktug_asci;",
+      "text": "--Step 1 / Used Nifi for #Spotify (when Spotify released 2020 top songs for everybody) for 10-15 minutes with a pause in two consecutive hours.\ndrop database if exists 2020s1_goktug_asci cascade;\ncreate database 2020s1_goktug_asci;\n--Step 2\nuse 2020s1_goktug_asci;",
       "user": "anonymous",
-      "dateUpdated": "2020-12-11T14:27:52+0100",
+      "dateUpdated": "2020-12-16T16:00:14+0100",
       "config": {
         "colWidth": 12,
         "fontSize": 9,
@@ -47,7 +47,7 @@
       "dateFinished": "2020-12-11T14:27:56+0100",
       "status": "FINISHED",
       "focus": true,
-      "$$hashKey": "object:260"
+      "$$hashKey": "object:27945"
     },
     {
       "text": "--Temp\nshow tables;",
@@ -115,7 +115,7 @@
       "dateStarted": "2020-12-11T14:33:29+0100",
       "dateFinished": "2020-12-11T14:33:30+0100",
       "status": "FINISHED",
-      "$$hashKey": "object:261"
+      "$$hashKey": "object:27946"
     },
     {
       "text": "--Step 3\ndrop table if exists sentiment_dictionary;\ncreate external table sentiment_dictionary (\n  type string,\n  length integer,\n  word string,\n  word_type string,\n  stemmed string,\n  polarity string\n)\nrow format serde 'org.apache.hadoop.hive.serde2.OpenCSVSerde' with serdeproperties (\"separatorChar\" = \"\\t\")\nstored as textfile\nlocation '/user/osbdet/datalake/raw/sentiment_dictionary/';\n",
@@ -159,7 +159,7 @@
       "dateStarted": "2020-12-11T14:33:36+0100",
       "dateFinished": "2020-12-11T14:33:37+0100",
       "status": "FINISHED",
-      "$$hashKey": "object:262"
+      "$$hashKey": "object:27947"
     },
     {
       "text": "--Temp\nselect * from sentiment_dictionary",
@@ -232,7 +232,7 @@
       "dateStarted": "2020-12-11T14:33:53+0100",
       "dateFinished": "2020-12-11T14:34:01+0100",
       "status": "FINISHED",
-      "$$hashKey": "object:263"
+      "$$hashKey": "object:27948"
     },
     {
       "text": "--Step 4\ndrop table if exists tweets_json;\ncreate external table tweets_json (\n    created_at string,\n    id bigint,\n    id_str string,\n    text string,\n    `user` struct<id:bigint,\n                  id_str:string,\n                  screen_name:string,\n                  name:string,\n                  followers_count:int,\n                  statuses_count:int,\n                  geo_enabled:boolean>,\n    `entities` struct<user_mentions:array<struct<screen_name:string>>,\n                      hashtags:array<struct<text:string>>>,               \n    lang string\n)\nrow format serde 'org.apache.hive.hcatalog.data.JsonSerDe'\nstored as textfile\nlocation '/user/osbdet/tweets/';",
@@ -276,12 +276,12 @@
       "dateStarted": "2020-12-11T14:34:06+0100",
       "dateFinished": "2020-12-11T14:34:07+0100",
       "status": "FINISHED",
-      "$$hashKey": "object:264"
+      "$$hashKey": "object:27949"
     },
     {
-      "text": "--Step 5 / it takes 3 min 12 secs. / count: 488\nselect count(*) from tweets_json;",
+      "text": "--Step 5 / it takes 3 min 0 secs. / count: 488\nselect count(*) from tweets_json;",
       "user": "anonymous",
-      "dateUpdated": "2020-12-11T14:34:25+0100",
+      "dateUpdated": "2020-12-16T15:57:22+0100",
       "config": {
         "colWidth": 12,
         "fontSize": 9,
@@ -349,7 +349,7 @@
           "values": [
             {
               "jobUrl": "http://localhost:8088/proxy/application_1607692997879_0001/",
-              "$$hashKey": "object:15164"
+              "$$hashKey": "object:29517"
             }
           ],
           "interpreterSettingId": "hive"
@@ -362,7 +362,7 @@
       "dateStarted": "2020-12-11T14:34:25+0100",
       "dateFinished": "2020-12-11T14:37:25+0100",
       "status": "FINISHED",
-      "$$hashKey": "object:265"
+      "$$hashKey": "object:27950"
     },
     {
       "text": "--Step 6\ndrop table if exists tweets_parquet;\ncreate table tweets_parquet stored as parquet as\n                    select * from tweets_json;",
@@ -407,7 +407,7 @@
           "values": [
             {
               "jobUrl": "http://localhost:8088/proxy/application_1607692997879_0002/",
-              "$$hashKey": "object:15199"
+              "$$hashKey": "object:29585"
             }
           ],
           "interpreterSettingId": "hive"
@@ -420,7 +420,7 @@
       "dateStarted": "2020-12-11T14:38:13+0100",
       "dateFinished": "2020-12-11T14:40:29+0100",
       "status": "FINISHED",
-      "$$hashKey": "object:266"
+      "$$hashKey": "object:27951"
     },
     {
       "text": "--Temp\nshow tables;",
@@ -515,12 +515,12 @@
       "dateStarted": "2020-12-11T14:40:54+0100",
       "dateFinished": "2020-12-11T14:40:55+0100",
       "status": "FINISHED",
-      "$$hashKey": "object:267"
+      "$$hashKey": "object:27952"
     },
     {
-      "text": "--Step 7 / it takes less than 1 sec / count: 388 / parquet is much faster\nselect COUNT(*) from tweets_parquet;\n",
+      "text": "--Step 7 / it takes 1 sec / count: 488 / parquet is much faster\nselect COUNT(*) from tweets_parquet;\n",
       "user": "anonymous",
-      "dateUpdated": "2020-12-11T14:41:01+0100",
+      "dateUpdated": "2020-12-16T15:57:43+0100",
       "config": {
         "colWidth": 12,
         "fontSize": 9,
@@ -583,7 +583,7 @@
       "dateStarted": "2020-12-11T14:41:02+0100",
       "dateFinished": "2020-12-11T14:41:03+0100",
       "status": "FINISHED",
-      "$$hashKey": "object:268"
+      "$$hashKey": "object:27953"
     },
     {
       "text": "--Temp\nselect * from tweets_parquet;",
@@ -661,12 +661,12 @@
       "dateStarted": "2020-12-11T14:41:08+0100",
       "dateFinished": "2020-12-11T14:41:12+0100",
       "status": "FINISHED",
-      "$$hashKey": "object:269"
+      "$$hashKey": "object:27954"
     },
     {
-      "text": "--Step 8 \n--Step 5 > it takes 3 min 12 secs. / count: 488\n--Step 7 > it takes 1 sec / count: 488 / Parquet stored managed table is much faster",
+      "text": "--Step 8 \n--Step 5 > it takes 3 mins. / count: 488\n--Step 7 > it takes 1 sec / count: 488 / Parquet stored managed table is much faster",
       "user": "anonymous",
-      "dateUpdated": "2020-12-07T23:34:52+0100",
+      "dateUpdated": "2020-12-16T15:57:50+0100",
       "config": {
         "colWidth": 12,
         "fontSize": 9,
@@ -690,7 +690,7 @@
       "id": "paragraph_1606654581211_400142343",
       "dateCreated": "2020-11-29T13:56:21+0100",
       "status": "READY",
-      "$$hashKey": "object:270"
+      "$$hashKey": "object:27955"
     },
     {
       "text": "--Step 9\nselect count(*) from (select `user`.screen_name from tweets_parquet where `user`.geo_enabled = true group by `user`.screen_name) a",
@@ -791,11 +791,11 @@
           "values": [
             {
               "jobUrl": "http://localhost:8088/proxy/application_1607692997879_0003/",
-              "$$hashKey": "object:17235"
+              "$$hashKey": "object:30017"
             },
             {
               "jobUrl": "http://localhost:8088/proxy/application_1607692997879_0004/",
-              "$$hashKey": "object:17236"
+              "$$hashKey": "object:30018"
             }
           ],
           "interpreterSettingId": "hive"
@@ -808,7 +808,7 @@
       "dateStarted": "2020-12-11T14:41:47+0100",
       "dateFinished": "2020-12-11T14:45:50+0100",
       "status": "FINISHED",
-      "$$hashKey": "object:271"
+      "$$hashKey": "object:27956"
     },
     {
       "text": "--Step 10\nselect lang, count(lang) as lang_count from tweets_parquet group by lang;",
@@ -882,7 +882,7 @@
           "values": [
             {
               "jobUrl": "http://localhost:8088/proxy/application_1607692997879_0005/",
-              "$$hashKey": "object:17383"
+              "$$hashKey": "object:30130"
             }
           ],
           "interpreterSettingId": "hive"
@@ -895,7 +895,7 @@
       "dateStarted": "2020-12-11T14:46:17+0100",
       "dateFinished": "2020-12-11T14:47:48+0100",
       "status": "FINISHED",
-      "$$hashKey": "object:272"
+      "$$hashKey": "object:27957"
     },
     {
       "text": "--Step 11\nselect  `user`.screen_name, max(`user`.statuses_count) as statuses_count from tweets_parquet group by `user`.screen_name order by max(`user`.statuses_count) desc limit 10;",
@@ -997,11 +997,11 @@
           "values": [
             {
               "jobUrl": "http://localhost:8088/proxy/application_1607692997879_0006/",
-              "$$hashKey": "object:18628"
+              "$$hashKey": "object:30238"
             },
             {
               "jobUrl": "http://localhost:8088/proxy/application_1607692997879_0007/",
-              "$$hashKey": "object:18629"
+              "$$hashKey": "object:30239"
             }
           ],
           "interpreterSettingId": "hive"
@@ -1014,7 +1014,7 @@
       "dateStarted": "2020-12-11T14:48:05+0100",
       "dateFinished": "2020-12-11T14:51:31+0100",
       "status": "FINISHED",
-      "$$hashKey": "object:273"
+      "$$hashKey": "object:27958"
     },
     {
       "text": "\n--Step 12\nselect `user`.screen_name, max(`user`.followers_count) from tweets_parquet group by `user`.screen_name order by max(`user`.followers_count) desc limit 10;",
@@ -1088,11 +1088,11 @@
           "values": [
             {
               "jobUrl": "http://localhost:8088/proxy/application_1607692997879_0008/",
-              "$$hashKey": "object:19133"
+              "$$hashKey": "object:30351"
             },
             {
               "jobUrl": "http://localhost:8088/proxy/application_1607692997879_0009/",
-              "$$hashKey": "object:19134"
+              "$$hashKey": "object:30352"
             }
           ],
           "interpreterSettingId": "hive"
@@ -1105,12 +1105,12 @@
       "dateStarted": "2020-12-11T14:51:48+0100",
       "dateFinished": "2020-12-11T14:55:40+0100",
       "status": "FINISHED",
-      "$$hashKey": "object:274"
+      "$$hashKey": "object:27959"
     },
     {
-      "text": "--Step 13\nselect hashtag, count(hashtag) as count from tweets_parquet lateral view explode(`entities`.`hashtags`.text) d as hashtag group by hashtag order by count desc limit 10;",
+      "text": "use 2020s1_goktug_asci;\n--Step 13\n--Optional: I made tweets case insensitive and calculated the count afterwards\nselect lower(hashtag), count(lower(hashtag)) as count from tweets_parquet lateral view explode(`entities`.`hashtags`.text) d as  hashtag group by lower(hashtag) order by count desc limit 10;",
       "user": "anonymous",
-      "dateUpdated": "2020-12-11T15:00:45+0100",
+      "dateUpdated": "2020-12-16T16:10:23+0100",
       "config": {
         "colWidth": 12,
         "fontSize": 9,
@@ -1175,7 +1175,7 @@
                   "tableGridState": {},
                   "tableColumnTypeState": {
                     "names": {
-                      "hashtag": "string",
+                      "_c0": "string",
                       "count": "string"
                     },
                     "updated": false
@@ -1210,11 +1210,11 @@
         "msg": [
           {
             "type": "TEXT",
-            "data": "INFO  : Compiling command(queryId=osbdet_20201211150046_a65789f2-5664-42e3-a46e-8908b3974759): select hashtag, count(hashtag) as count from tweets_parquet lateral view explode(`entities`.`hashtags`.text) d as hashtag group by hashtag order by count desc limit 10\nINFO  : Concurrency mode is disabled, not creating a lock manager\nINFO  : Semantic Analysis Completed (retrial = false)\nINFO  : Returning Hive schema: Schema(fieldSchemas:[FieldSchema(name:hashtag, type:string, comment:null), FieldSchema(name:count, type:bigint, comment:null)], properties:null)\nINFO  : Completed compiling command(queryId=osbdet_20201211150046_a65789f2-5664-42e3-a46e-8908b3974759); Time taken: 0.641 seconds\nINFO  : Concurrency mode is disabled, not creating a lock manager\nINFO  : Executing command(queryId=osbdet_20201211150046_a65789f2-5664-42e3-a46e-8908b3974759): select hashtag, count(hashtag) as count from tweets_parquet lateral view explode(`entities`.`hashtags`.text) d as hashtag group by hashtag order by count desc limit 10\nWARN  : Hive-on-MR is deprecated in Hive 2 and may not be available in the future versions. Consider using a different execution engine (i.e. spark, tez) or using Hive 1.X releases.\nINFO  : Query ID = osbdet_20201211150046_a65789f2-5664-42e3-a46e-8908b3974759\nINFO  : Total jobs = 2\nINFO  : Launching Job 1 out of 2\nINFO  : Starting task [Stage-1:MAPRED] in serial mode\nINFO  : Number of reduce tasks not specified. Estimated from input data size: 1\nINFO  : In order to change the average load for a reducer (in bytes):\nINFO  :   set hive.exec.reducers.bytes.per.reducer=<number>\nINFO  : In order to limit the maximum number of reducers:\nINFO  :   set hive.exec.reducers.max=<number>\nINFO  : In order to set a constant number of reducers:\nINFO  :   set mapreduce.job.reduces=<number>\nINFO  : number of splits:1\nINFO  : Submitting tokens for job: job_1607692997879_0010\nINFO  : Executing with tokens: []\nINFO  : The url to track the job: http://localhost:8088/proxy/application_1607692997879_0010/\nINFO  : Starting Job = job_1607692997879_0010, Tracking URL = http://localhost:8088/proxy/application_1607692997879_0010/\nINFO  : Kill Command = /opt/hadoop/bin/mapred job  -kill job_1607692997879_0010\nINFO  : Hadoop job information for Stage-1: number of mappers: 1; number of reducers: 1\nINFO  : 2020-12-11 15:01:42,022 Stage-1 map = 0%,  reduce = 0%\nINFO  : 2020-12-11 15:02:02,491 Stage-1 map = 100%,  reduce = 0%, Cumulative CPU 5.81 sec\nINFO  : 2020-12-11 15:02:23,688 Stage-1 map = 100%,  reduce = 100%, Cumulative CPU 13.41 sec\nINFO  : MapReduce Total cumulative CPU time: 13 seconds 410 msec\nINFO  : Ended Job = job_1607692997879_0010\nINFO  : Launching Job 2 out of 2\nINFO  : Starting task [Stage-2:MAPRED] in serial mode\nINFO  : Number of reduce tasks determined at compile time: 1\nINFO  : In order to change the average load for a reducer (in bytes):\nINFO  :   set hive.exec.reducers.bytes.per.reducer=<number>\nINFO  : In order to limit the maximum number of reducers:\nINFO  :   set hive.exec.reducers.max=<number>\nINFO  : In order to set a constant number of reducers:\nINFO  :   set mapreduce.job.reduces=<number>\nINFO  : number of splits:1\nINFO  : Submitting tokens for job: job_1607692997879_0011\nINFO  : Executing with tokens: []\nINFO  : The url to track the job: http://localhost:8088/proxy/application_1607692997879_0011/\nINFO  : Starting Job = job_1607692997879_0011, Tracking URL = http://localhost:8088/proxy/application_1607692997879_0011/\nINFO  : Kill Command = /opt/hadoop/bin/mapred job  -kill job_1607692997879_0011\nINFO  : Hadoop job information for Stage-2: number of mappers: 1; number of reducers: 1\nINFO  : 2020-12-11 15:03:17,406 Stage-2 map = 0%,  reduce = 0%\nINFO  : 2020-12-11 15:03:38,063 Stage-2 map = 100%,  reduce = 0%, Cumulative CPU 8.4 sec\nINFO  : 2020-12-11 15:03:55,060 Stage-2 map = 100%,  reduce = 100%, Cumulative CPU 14.99 sec\nINFO  : MapReduce Total cumulative CPU time: 14 seconds 990 msec\nINFO  : Ended Job = job_1607692997879_0011\nINFO  : MapReduce Jobs Launched: \nINFO  : Stage-Stage-1: Map: 1  Reduce: 1   Cumulative CPU: 13.41 sec   HDFS Read: 24293 HDFS Write: 10132 SUCCESS\nINFO  : Stage-Stage-2: Map: 1  Reduce: 1   Cumulative CPU: 14.99 sec   HDFS Read: 17735 HDFS Write: 345 SUCCESS\nINFO  : Total MapReduce CPU Time Spent: 28 seconds 400 msec\nINFO  : Completed executing command(queryId=osbdet_20201211150046_a65789f2-5664-42e3-a46e-8908b3974759); Time taken: 190.006 seconds\nINFO  : OK\nINFO  : Concurrency mode is disabled, not creating a lock manager\n"
+            "data": "Query executed successfully. Affected rows : -1INFO  : Compiling command(queryId=osbdet_20201216160249_f78193ad-9090-4f30-8c2a-6238cd5ea842): select lower(hashtag), count(lower(hashtag)) as count from tweets_parquet lateral view explode(`entities`.`hashtags`.text) d as  hashtag group by lower(hashtag) order by count desc limit 10\nINFO  : Concurrency mode is disabled, not creating a lock manager\nINFO  : Semantic Analysis Completed (retrial = false)\nINFO  : Returning Hive schema: Schema(fieldSchemas:[FieldSchema(name:_c0, type:string, comment:null), FieldSchema(name:count, type:bigint, comment:null)], properties:null)\nINFO  : Completed compiling command(queryId=osbdet_20201216160249_f78193ad-9090-4f30-8c2a-6238cd5ea842); Time taken: 1.453 seconds\nINFO  : Concurrency mode is disabled, not creating a lock manager\nINFO  : Executing command(queryId=osbdet_20201216160249_f78193ad-9090-4f30-8c2a-6238cd5ea842): select lower(hashtag), count(lower(hashtag)) as count from tweets_parquet lateral view explode(`entities`.`hashtags`.text) d as  hashtag group by lower(hashtag) order by count desc limit 10\nWARN  : Hive-on-MR is deprecated in Hive 2 and may not be available in the future versions. Consider using a different execution engine (i.e. spark, tez) or using Hive 1.X releases.\nINFO  : Query ID = osbdet_20201216160249_f78193ad-9090-4f30-8c2a-6238cd5ea842\nINFO  : Total jobs = 2\nINFO  : Launching Job 1 out of 2\nINFO  : Starting task [Stage-1:MAPRED] in serial mode\nINFO  : Number of reduce tasks not specified. Estimated from input data size: 1\nINFO  : In order to change the average load for a reducer (in bytes):\nINFO  :   set hive.exec.reducers.bytes.per.reducer=<number>\nINFO  : In order to limit the maximum number of reducers:\nINFO  :   set hive.exec.reducers.max=<number>\nINFO  : In order to set a constant number of reducers:\nINFO  :   set mapreduce.job.reduces=<number>\nINFO  : number of splits:1\nINFO  : Submitting tokens for job: job_1608130417431_0001\nINFO  : Executing with tokens: []\nINFO  : The url to track the job: http://localhost:8088/proxy/application_1608130417431_0001/\nINFO  : Starting Job = job_1608130417431_0001, Tracking URL = http://localhost:8088/proxy/application_1608130417431_0001/\nINFO  : Kill Command = /opt/hadoop/bin/mapred job  -kill job_1608130417431_0001\nINFO  : Hadoop job information for Stage-1: number of mappers: 1; number of reducers: 1\nINFO  : 2020-12-16 16:04:41,260 Stage-1 map = 0%,  reduce = 0%\nINFO  : 2020-12-16 16:05:06,020 Stage-1 map = 100%,  reduce = 0%, Cumulative CPU 8.41 sec\nINFO  : 2020-12-16 16:05:46,222 Stage-1 map = 100%,  reduce = 67%, Cumulative CPU 17.52 sec\nINFO  : 2020-12-16 16:05:47,416 Stage-1 map = 100%,  reduce = 100%, Cumulative CPU 18.14 sec\nINFO  : MapReduce Total cumulative CPU time: 18 seconds 140 msec\nINFO  : Ended Job = job_1608130417431_0001\nINFO  : Launching Job 2 out of 2\nINFO  : Starting task [Stage-2:MAPRED] in serial mode\nINFO  : Number of reduce tasks determined at compile time: 1\nINFO  : In order to change the average load for a reducer (in bytes):\nINFO  :   set hive.exec.reducers.bytes.per.reducer=<number>\nINFO  : In order to limit the maximum number of reducers:\nINFO  :   set hive.exec.reducers.max=<number>\nINFO  : In order to set a constant number of reducers:\nINFO  :   set mapreduce.job.reduces=<number>\nINFO  : number of splits:1\nINFO  : Submitting tokens for job: job_1608130417431_0002\nINFO  : Executing with tokens: []\nINFO  : The url to track the job: http://localhost:8088/proxy/application_1608130417431_0002/\nINFO  : Starting Job = job_1608130417431_0002, Tracking URL = http://localhost:8088/proxy/application_1608130417431_0002/\nINFO  : Kill Command = /opt/hadoop/bin/mapred job  -kill job_1608130417431_0002\nINFO  : Hadoop job information for Stage-2: number of mappers: 1; number of reducers: 1\nINFO  : 2020-12-16 16:07:16,075 Stage-2 map = 0%,  reduce = 0%\nINFO  : 2020-12-16 16:07:32,428 Stage-2 map = 100%,  reduce = 0%, Cumulative CPU 3.94 sec\nINFO  : 2020-12-16 16:07:53,296 Stage-2 map = 100%,  reduce = 100%, Cumulative CPU 8.51 sec\nINFO  : MapReduce Total cumulative CPU time: 8 seconds 510 msec\nINFO  : Ended Job = job_1608130417431_0002\nINFO  : MapReduce Jobs Launched: \nINFO  : Stage-Stage-1: Map: 1  Reduce: 1   Cumulative CPU: 18.14 sec   HDFS Read: 24577 HDFS Write: 9549 SUCCESS\nINFO  : Stage-Stage-2: Map: 1  Reduce: 1   Cumulative CPU: 8.51 sec   HDFS Read: 17236 HDFS Write: 356 SUCCESS\nINFO  : Total MapReduce CPU Time Spent: 26 seconds 650 msec\nINFO  : Completed executing command(queryId=osbdet_20201216160249_f78193ad-9090-4f30-8c2a-6238cd5ea842); Time taken: 305.274 seconds\nINFO  : OK\nINFO  : Concurrency mode is disabled, not creating a lock manager\n"
           },
           {
             "type": "TABLE",
-            "data": "hashtag\tcount\nSpotify\t166\nYouTuber\t88\nSpotifyWrapped\t53\nspotify\t46\n2020Wrapped\t24\nBTS\t23\nBTSARMY\t22\nmusic\t13\n여자아이들\t13\nGIDLE\t13\n"
+            "data": "_c0\tcount\nspotify\t212\nyoutuber\t88\nspotifywrapped\t55\n2020wrapped\t27\nbts\t23\nbtsarmy\t22\nmusic\t17\nspotifywrapped2020\t14\ngidle\t13\n여자아이들\t13\n"
           }
         ]
       },
@@ -1227,12 +1227,12 @@
           "group": "jdbc",
           "values": [
             {
-              "jobUrl": "http://localhost:8088/proxy/application_1607692997879_0010/",
-              "$$hashKey": "object:19691"
+              "jobUrl": "http://localhost:8088/proxy/application_1608130417431_0001/",
+              "$$hashKey": "object:30464"
             },
             {
-              "jobUrl": "http://localhost:8088/proxy/application_1607692997879_0011/",
-              "$$hashKey": "object:19692"
+              "jobUrl": "http://localhost:8088/proxy/application_1608130417431_0002/",
+              "$$hashKey": "object:30465"
             }
           ],
           "interpreterSettingId": "hive"
@@ -1242,10 +1242,10 @@
       "jobName": "paragraph_1606571446761_2130043207",
       "id": "paragraph_1606571446761_2130043207",
       "dateCreated": "2020-11-28T14:50:46+0100",
-      "dateStarted": "2020-12-11T15:00:45+0100",
-      "dateFinished": "2020-12-11T15:03:58+0100",
+      "dateStarted": "2020-12-16T16:02:49+0100",
+      "dateFinished": "2020-12-16T16:07:58+0100",
       "status": "FINISHED",
-      "$$hashKey": "object:275"
+      "$$hashKey": "object:27960"
     },
     {
       "text": "--Step 14\nselect text, (LENGTH(text) - LENGTH(REPLACE(text, ' ', ''))) as word_count from tweets_parquet;",
@@ -1314,7 +1314,7 @@
       "dateStarted": "2020-12-11T15:04:19+0100",
       "dateFinished": "2020-12-11T15:04:24+0100",
       "status": "FINISHED",
-      "$$hashKey": "object:276"
+      "$$hashKey": "object:27961"
     },
     {
       "text": "--Step 14\nselect ROUND(AVG((LENGTH(text) - LENGTH(REPLACE(text, ' ', '')))), 2) as two_decimal_average_word_count from tweets_parquet;",
@@ -1415,7 +1415,7 @@
           "values": [
             {
               "jobUrl": "http://localhost:8088/proxy/application_1607692997879_0012/",
-              "$$hashKey": "object:20481"
+              "$$hashKey": "object:30669"
             }
           ],
           "interpreterSettingId": "hive"
@@ -1428,7 +1428,7 @@
       "dateStarted": "2020-12-11T15:04:55+0100",
       "dateFinished": "2020-12-11T15:06:27+0100",
       "status": "FINISHED",
-      "$$hashKey": "object:277"
+      "$$hashKey": "object:27962"
     },
     {
       "text": "--Step 15\nselect max(size(`entities`.`hashtags`))  as max_number_hashtags, round(avg(size(`entities`.`hashtags`)), 2) as average_number_hashtags from tweets_parquet;",
@@ -1529,7 +1529,7 @@
           "values": [
             {
               "jobUrl": "http://localhost:8088/proxy/application_1607692997879_0013/",
-              "$$hashKey": "object:21049"
+              "$$hashKey": "object:30777"
             }
           ],
           "interpreterSettingId": "hive"
@@ -1542,7 +1542,7 @@
       "dateStarted": "2020-12-11T15:06:36+0100",
       "dateFinished": "2020-12-11T15:08:00+0100",
       "status": "FINISHED",
-      "$$hashKey": "object:278"
+      "$$hashKey": "object:27963"
     },
     {
       "text": "--Step 16\nselect screen_name, count(screen_name) as user_mentions_count from tweets_parquet lateral view explode(`entities`.`user_mentions`.screen_name) d as screen_name group by screen_name order by user_mentions_count desc limit 10;",
@@ -1679,11 +1679,11 @@
           "values": [
             {
               "jobUrl": "http://localhost:8088/proxy/application_1607692997879_0019/",
-              "$$hashKey": "object:23730"
+              "$$hashKey": "object:30885"
             },
             {
               "jobUrl": "http://localhost:8088/proxy/application_1607692997879_0020/",
-              "$$hashKey": "object:23731"
+              "$$hashKey": "object:30886"
             }
           ],
           "interpreterSettingId": "hive"
@@ -1696,7 +1696,7 @@
       "dateStarted": "2020-12-11T15:27:04+0100",
       "dateFinished": "2020-12-11T15:30:04+0100",
       "status": "FINISHED",
-      "$$hashKey": "object:279"
+      "$$hashKey": "object:27964"
     },
     {
       "text": "--Temp\nSELECT id, lower(word) FROM tweets_parquet LATERAL VIEW explode(split(text, ' ')) lTable as word where word != \"\"",
@@ -1765,12 +1765,12 @@
       "dateStarted": "2020-12-11T15:30:23+0100",
       "dateFinished": "2020-12-11T15:30:31+0100",
       "status": "FINISHED",
-      "$$hashKey": "object:280"
+      "$$hashKey": "object:27965"
     },
     {
       "text": "--Step 17\ndrop table if exists tweet_words;\ncreate table tweet_words(created_at string, id bigint, word string) stored AS orc ;",
       "user": "anonymous",
-      "dateUpdated": "2020-12-11T15:30:40+0100",
+      "dateUpdated": "2020-12-16T15:58:40+0100",
       "config": {
         "colWidth": 12,
         "fontSize": 9,
@@ -1866,7 +1866,7 @@
       "dateStarted": "2020-12-11T15:30:41+0100",
       "dateFinished": "2020-12-11T15:30:44+0100",
       "status": "FINISHED",
-      "$$hashKey": "object:281"
+      "$$hashKey": "object:27966"
     },
     {
       "text": "--Step 17\nINSERT INTO TABLE tweet_words (SELECT created_at, id, lower(word) FROM tweets_parquet LATERAL VIEW explode(split(text, ' ')) lTable as word where word != \"\");",
@@ -1911,7 +1911,7 @@
           "values": [
             {
               "jobUrl": "http://localhost:8088/proxy/application_1607692997879_0021/",
-              "$$hashKey": "object:24388"
+              "$$hashKey": "object:31112"
             }
           ],
           "interpreterSettingId": "hive"
@@ -1924,7 +1924,7 @@
       "dateStarted": "2020-12-11T15:31:08+0100",
       "dateFinished": "2020-12-11T15:32:53+0100",
       "status": "FINISHED",
-      "$$hashKey": "object:282"
+      "$$hashKey": "object:27967"
     },
     {
       "text": "--Temp\nselect * from tweet_words;",
@@ -1994,7 +1994,7 @@
       "dateStarted": "2020-12-11T15:37:52+0100",
       "dateFinished": "2020-12-11T15:37:55+0100",
       "status": "FINISHED",
-      "$$hashKey": "object:283"
+      "$$hashKey": "object:27968"
     },
     {
       "text": "--Temp\nselect tweet_words.created_at, tweet_words.id, tweet_words.word, case when sentiment_dictionary.polarity = 'positive' then 1\n     when sentiment_dictionary.polarity = 'negative' then -1\n     else 0\nend as polarity from tweet_words left join sentiment_dictionary on tweet_words.word = sentiment_dictionary.word;",
@@ -2023,7 +2023,7 @@
       "id": "paragraph_1606662462189_1073608831",
       "dateCreated": "2020-11-29T16:07:42+0100",
       "status": "READY",
-      "$$hashKey": "object:284"
+      "$$hashKey": "object:27969"
     },
     {
       "text": "--Step 18\ndrop table if exists tweet_words_sentiment;\ncreate table tweet_words_sentiment stored as parquet as\n(select tweet_words.created_at, tweet_words.id, tweet_words.word, case when sentiment_dictionary.polarity = 'positive' then 1\n                                               when sentiment_dictionary.polarity = 'negative' then -1\n                                               else 0\n                                               end as polarity \nfrom tweet_words left join sentiment_dictionary on tweet_words.word = sentiment_dictionary.word);",
@@ -2068,7 +2068,7 @@
           "values": [
             {
               "jobUrl": "http://localhost:8088/proxy/application_1607692997879_0022/",
-              "$$hashKey": "object:25123"
+              "$$hashKey": "object:31314"
             }
           ],
           "interpreterSettingId": "hive"
@@ -2081,7 +2081,7 @@
       "dateStarted": "2020-12-11T15:38:01+0100",
       "dateFinished": "2020-12-11T15:39:39+0100",
       "status": "FINISHED",
-      "$$hashKey": "object:285"
+      "$$hashKey": "object:27970"
     },
     {
       "text": "--Temp\nselect created_at, id, word from tweet_words_sentiment;",
@@ -2199,7 +2199,7 @@
       "dateStarted": "2020-12-11T15:45:22+0100",
       "dateFinished": "2020-12-11T15:45:24+0100",
       "status": "FINISHED",
-      "$$hashKey": "object:286"
+      "$$hashKey": "object:27971"
     },
     {
       "text": "--Temp\nselect id, case when sum(polarity) > 0 then 'positive'\n                when sum(polarity) < 0 then 'negative'\n                else 'neutral'\n                end as polarity\nfrom tweet_words_sentiment\ngroup by id",
@@ -2304,7 +2304,7 @@
       "dateStarted": "2020-12-11T15:45:40+0100",
       "dateFinished": "2020-12-11T15:46:06+0100",
       "status": "ABORT",
-      "$$hashKey": "object:287"
+      "$$hashKey": "object:27972"
     },
     {
       "text": "--Step 19\ndrop table if exists tweets_sentiment;\ncreate table tweets_sentiment stored as parquet as (select id, case when sum(polarity) > 0 then 'positive'\n     when sum(polarity) < 0 then 'negative'\n     else 'neutral'\nend as polarity\nfrom tweet_words_sentiment\ngroup by id);",
@@ -2349,7 +2349,7 @@
           "values": [
             {
               "jobUrl": "http://localhost:8088/proxy/application_1607692997879_0024/",
-              "$$hashKey": "object:26587"
+              "$$hashKey": "object:31536"
             }
           ],
           "interpreterSettingId": "hive"
@@ -2362,7 +2362,7 @@
       "dateStarted": "2020-12-11T15:46:12+0100",
       "dateFinished": "2020-12-11T15:47:49+0100",
       "status": "FINISHED",
-      "$$hashKey": "object:288"
+      "$$hashKey": "object:27973"
     },
     {
       "text": "--Temp\nselect * from tweets_sentiment;",
@@ -2431,7 +2431,7 @@
       "dateStarted": "2020-12-11T15:51:28+0100",
       "dateFinished": "2020-12-11T15:51:29+0100",
       "status": "FINISHED",
-      "$$hashKey": "object:289"
+      "$$hashKey": "object:27974"
     },
     {
       "text": "--Step 20 / creating macro\ncreate temporary MACRO tweet_hour(created_at string) from_unixtime(unix_timestamp(created_at,\n'EEE MMM dd HH:mm:ss ZZZZZ yyyy'), 'yyyyMMddHH');",
@@ -2471,7 +2471,7 @@
       "dateStarted": "2020-12-11T15:51:35+0100",
       "dateFinished": "2020-12-11T15:51:35+0100",
       "status": "FINISHED",
-      "$$hashKey": "object:290"
+      "$$hashKey": "object:27975"
     },
     {
       "text": "--Step 20\nSELECT\ntweet_hour(created_at) as hour,\ncount(case when polarity > 0 then 1 end) as positive,\ncount(case when polarity < 0 then 1 end) as negative,\ncount(case when polarity = 0 then 1 end) as neutral\nFROM tweet_words_sentiment\nGROUP BY tweet_hour(created_at)\n",
@@ -2574,7 +2574,7 @@
           "values": [
             {
               "jobUrl": "http://localhost:8088/proxy/application_1607692997879_0025/",
-              "$$hashKey": "object:27386"
+              "$$hashKey": "object:31788"
             }
           ],
           "interpreterSettingId": "hive"
@@ -2587,17 +2587,48 @@
       "dateStarted": "2020-12-11T15:51:40+0100",
       "dateFinished": "2020-12-11T15:53:02+0100",
       "status": "FINISHED",
-      "$$hashKey": "object:291"
+      "$$hashKey": "object:27976"
     },
     {
       "text": "--Temp\nselect * from tweet_words_sentiment;",
       "user": "anonymous",
-      "dateUpdated": "2020-12-11T15:56:52+0100",
+      "dateUpdated": "2020-12-16T15:56:23+0100",
       "config": {
         "colWidth": 12,
         "fontSize": 9,
         "enabled": true,
-        "results": {},
+        "results": {
+          "0": {
+            "graph": {
+              "mode": "table",
+              "height": 300,
+              "optionOpen": false,
+              "setting": {
+                "table": {
+                  "tableGridState": {},
+                  "tableColumnTypeState": {
+                    "names": {
+                      "created_at": "string",
+                      "id": "string",
+                      "word": "string",
+                      "polarity": "string"
+                    },
+                    "updated": false
+                  },
+                  "tableOptionSpecHash": "[{\"name\":\"useFilter\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable filter for columns\"},{\"name\":\"showPagination\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable pagination for better navigation\"},{\"name\":\"showAggregationFooter\",\"valueType\":\"boolean\",\"defaultValue\":false,\"widget\":\"checkbox\",\"description\":\"Enable a footer for displaying aggregated values\"}]",
+                  "tableOptionValue": {
+                    "useFilter": false,
+                    "showPagination": false,
+                    "showAggregationFooter": false
+                  },
+                  "updated": false,
+                  "initialized": false
+                }
+              },
+              "commonSetting": {}
+            }
+          }
+        },
         "editorSetting": {
           "language": "sql",
           "editOnDblClick": false,
@@ -2609,16 +2640,6 @@
         "params": {},
         "forms": {}
       },
-      "apps": [],
-      "runtimeInfos": {},
-      "progressUpdateIntervalMs": 500,
-      "jobName": "paragraph_1606664466913_1713851091",
-      "id": "paragraph_1606664466913_1713851091",
-      "dateCreated": "2020-11-29T16:41:06+0100",
-      "status": "FINISHED",
-      "$$hashKey": "object:292",
-      "dateFinished": "2020-12-11T15:56:55+0100",
-      "dateStarted": "2020-12-11T15:56:53+0100",
       "results": {
         "code": "SUCCESS",
         "msg": [
@@ -2627,7 +2648,17 @@
             "data": "created_at\tid\tword\tpolarity\nWed Dec 02 18:37:23 +0000 2020\t1334205036277088256\t@saulalfrente\t0\nWed Dec 02 18:37:23 +0000 2020\t1334205036277088256\t@youtube\t0\nWed Dec 02 18:37:23 +0000 2020\t1334205036277088256\they! i\t0\nWed Dec 02 18:37:23 +0000 2020\t1334205036277088256\tam\t0\nWed Dec 02 18:37:23 +0000 2020\t1334205036277088256\tan\t0\nWed Dec 02 18:37:23 +0000 2020\t1334205036277088256\torganic\t0\nWed Dec 02 18:37:23 +0000 2020\t1334205036277088256\t#youtuber\t0\nWed Dec 02 18:37:23 +0000 2020\t1334205036277088256\tchannel\t0\nWed Dec 02 18:37:23 +0000 2020\t1334205036277088256\tand\t0\nWed Dec 02 18:37:23 +0000 2020\t1334205036277088256\tvideo\t0\nWed Dec 02 18:37:23 +0000 2020\t1334205036277088256\tpromoter.\t0\nWed Dec 02 18:37:23 +0000 2020\t1334205036277088256\ti\t0\nWed Dec 02 18:37:23 +0000 2020\t1334205036277088256\tcan\t0\nWed Dec 02 18:37:23 +0000 2020\t1334205036277088256\tpromote\t0\nWed Dec 02 18:37:23 +0000 2020\t1334205036277088256\tyour\t0\nWed Dec 02 18:37:23 +0000 2020\t1334205036277088256\tchannel\t0\nWed Dec 02 18:37:23 +0000 2020\t1334205036277088256\tvideo…\t0\nWed Dec 02 18:37:23 +0000 2020\t1334205036277088256\thttps://t.co/1kpbthbl2j\t0\nWed Dec 02 18:37:26 +0000 2020\t1334205050369888256\t@citoyenmarseill\t0\nWed Dec 02 18:37:26 +0000 2020\t1334205050369888256\t@youtube\t0\nWed Dec 02 18:37:26 +0000 2020\t1334205050369888256\they! i\t0\nWed Dec 02 18:37:26 +0000 2020\t1334205050369888256\tam\t0\nWed Dec 02 18:37:26 +0000 2020\t1334205050369888256\tan\t0\nWed Dec 02 18:37:26 +0000 2020\t1334205050369888256\torganic\t0\nWed Dec 02 18:37:26 +0000 2020\t1334205050369888256\t#youtuber\t0\nWed Dec 02 18:37:26 +0000 2020\t1334205050369888256\tchannel\t0\nWed Dec 02 18:37:26 +0000 2020\t1334205050369888256\tand\t0\nWed Dec 02 18:37:26 +0000 2020\t1334205050369888256\tvideo\t0\nWed Dec 02 18:37:26 +0000 2020\t1334205050369888256\tpromoter.\t0\nWed Dec 02 18:37:26 +0000 2020\t1334205050369888256\ti\t0\nWed Dec 02 18:37:26 +0000 2020\t1334205050369888256\tcan\t0\nWed Dec 02 18:37:26 +0000 2020\t1334205050369888256\tpromote\t0\nWed Dec 02 18:37:26 +0000 2020\t1334205050369888256\tyour\t0\nWed Dec 02 18:37:26 +0000 2020\t1334205050369888256\tchannel\t0\nWed Dec 02 18:37:26 +0000 2020\t1334205050369888256\tvid…\t0\nWed Dec 02 18:37:26 +0000 2020\t1334205050369888256\thttps://t.co/kryjzyvrii\t0\nWed Dec 02 18:37:27 +0000 2020\t1334205054455201794\tit\t0\nWed Dec 02 18:37:27 +0000 2020\t1334205054455201794\tused\t0\nWed Dec 02 18:37:27 +0000 2020\t1334205054455201794\tto\t0\nWed Dec 02 18:37:27 +0000 2020\t1334205054455201794\tbe\t0\nWed Dec 02 18:37:27 +0000 2020\t1334205054455201794\tvinyl\t0\nWed Dec 02 18:37:27 +0000 2020\t1334205054455201794\ton\t0\nWed Dec 02 18:37:27 +0000 2020\t1334205054455201794\ta\t0\nWed Dec 02 18:37:27 +0000 2020\t1334205054455201794\tturntable.\t0\nWed Dec 02 18:37:27 +0000 2020\t1334205054455201794\tnow\t0\nWed Dec 02 18:37:27 +0000 2020\t1334205054455201794\tit\t0\nWed Dec 02 18:37:27 +0000 2020\t1334205054455201794\tis\t0\nWed Dec 02 18:37:27 +0000 2020\t1334205054455201794\tbits\t0\nWed Dec 02 18:37:27 +0000 2020\t1334205054455201794\tstreaming\t0\nWed Dec 02 18:37:27 +0000 2020\t1334205054455201794\tfrom\t0\nWed Dec 02 18:37:27 +0000 2020\t1334205054455201794\tthe\t0\nWed Dec 02 18:37:27 +0000 2020\t1334205054455201794\tinternet.\t0\nWed Dec 02 18:37:27 +0000 2020\t1334205054455201794\tit’s\t0\nWed Dec 02 18:37:27 +0000 2020\t1334205054455201794\tstill\t0\nWed Dec 02 18:37:27 +0000 2020\t1334205054455201794\tmusic.\t0\nWed Dec 02 18:37:27 +0000 2020\t1334205054455201794\tmany\t0\nWed Dec 02 18:37:27 +0000 2020\t1334205054455201794\tthanks\t0\nWed Dec 02 18:37:27 +0000 2020\t1334205054455201794\tto\t0\nWed Dec 02 18:37:27 +0000 2020\t1334205054455201794\tmy…\t0\nWed Dec 02 18:37:27 +0000 2020\t1334205054455201794\thttps://t.co/ffqewqhrmm\t0\nWed Dec 02 18:37:28 +0000 2020\t1334205056447631364\tescuchas\t0\nWed Dec 02 18:37:28 +0000 2020\t1334205056447631364\tque\t0\nWed Dec 02 18:37:28 +0000 2020\t1334205056447631364\tnos\t0\nWed Dec 02 18:37:28 +0000 2020\t1334205056447631364\tsiguen\t0\nWed Dec 02 18:37:28 +0000 2020\t1334205056447631364\ten\t0\nWed Dec 02 18:37:28 +0000 2020\t1334205056447631364\t#spotify,\t0\nWed Dec 02 18:37:28 +0000 2020\t1334205056447631364\testos\t0\nWed Dec 02 18:37:28 +0000 2020\t1334205056447631364\tson\t0\nWed Dec 02 18:37:28 +0000 2020\t1334205056447631364\tnuestros\t0\nWed Dec 02 18:37:28 +0000 2020\t1334205056447631364\tnúmeros\t0\nWed Dec 02 18:37:28 +0000 2020\t1334205056447631364\tde\t0\nWed Dec 02 18:37:28 +0000 2020\t1334205056447631364\tnuestro\t0\nWed Dec 02 18:37:28 +0000 2020\t1334205056447631364\taño\t0\nWed Dec 02 18:37:28 +0000 2020\t1334205056447631364\tdebut.  que\t0\nWed Dec 02 18:37:28 +0000 2020\t1334205056447631364\tmás\t0\nWed Dec 02 18:37:28 +0000 2020\t1334205056447631364\tque\t0\nWed Dec 02 18:37:28 +0000 2020\t1334205056447631364\tagradecerte\t0\nWed Dec 02 18:37:28 +0000 2020\t1334205056447631364\ty\t0\nWed Dec 02 18:37:28 +0000 2020\t1334205056447631364\tp…\t0\nWed Dec 02 18:37:28 +0000 2020\t1334205056447631364\thttps://t.co/8jhrbdleua\t0\nWed Dec 02 18:43:40 +0000 2020\t1334206616732717058\t@skinwalkerstv\t0\nWed Dec 02 18:43:40 +0000 2020\t1334206616732717058\t@youtube\t0\nWed Dec 02 18:43:40 +0000 2020\t1334206616732717058\they! i\t0\nWed Dec 02 18:43:40 +0000 2020\t1334206616732717058\tam\t0\nWed Dec 02 18:43:40 +0000 2020\t1334206616732717058\tan\t0\nWed Dec 02 18:43:40 +0000 2020\t1334206616732717058\torganic\t0\nWed Dec 02 18:43:40 +0000 2020\t1334206616732717058\t#youtuber\t0\nWed Dec 02 18:43:40 +0000 2020\t1334206616732717058\tchannel\t0\nWed Dec 02 18:43:40 +0000 2020\t1334206616732717058\tand\t0\nWed Dec 02 18:43:40 +0000 2020\t1334206616732717058\tvideo\t0\nWed Dec 02 18:43:40 +0000 2020\t1334206616732717058\tpromoter.\t0\nWed Dec 02 18:43:40 +0000 2020\t1334206616732717058\ti\t0\nWed Dec 02 18:43:40 +0000 2020\t1334206616732717058\tcan\t0\nWed Dec 02 18:43:40 +0000 2020\t1334206616732717058\tpromote\t0\nWed Dec 02 18:43:40 +0000 2020\t1334206616732717058\tyour\t0\nWed Dec 02 18:43:40 +0000 2020\t1334206616732717058\tchannel\t0\nWed Dec 02 18:43:40 +0000 2020\t1334206616732717058\tvideo…\t0\nWed Dec 02 18:43:40 +0000 2020\t1334206616732717058\thttps://t.co/5dgsiwn2wl\t0\nWed Dec 02 18:43:42 +0000 2020\t1334206627168145408\tspotify\t0\nWed Dec 02 18:43:42 +0000 2020\t1334206627168145408\twrapped\t0\nWed Dec 02 18:43:42 +0000 2020\t1334206627168145408\tis\t0\nWed Dec 02 18:43:42 +0000 2020\t1334206627168145408\tthe\t0\nWed Dec 02 18:43:42 +0000 2020\t1334206627168145408\tbest\t1\nWed Dec 02 18:43:42 +0000 2020\t1334206627168145408\texample\t0\nWed Dec 02 18:43:42 +0000 2020\t1334206627168145408\tof\t0\nWed Dec 02 18:43:42 +0000 2020\t1334206627168145408\twhat\t0\nWed Dec 02 18:43:42 +0000 2020\t1334206627168145408\ta\t0\nWed Dec 02 18:43:42 +0000 2020\t1334206627168145408\tmodern\t1\nWed Dec 02 18:43:42 +0000 2020\t1334206627168145408\tmarketing\t0\nWed Dec 02 18:43:42 +0000 2020\t1334206627168145408\tcampaign\t0\nWed Dec 02 18:43:42 +0000 2020\t1334206627168145408\tlooks\t0\nWed Dec 02 18:43:42 +0000 2020\t1334206627168145408\tlike\t1\nWed Dec 02 18:43:42 +0000 2020\t1334206627168145408\t–\t0\nWed Dec 02 18:43:42 +0000 2020\t1334206627168145408\tit\t0\nWed Dec 02 18:43:42 +0000 2020\t1334206627168145408\teffectively\t0\nWed Dec 02 18:43:42 +0000 2020\t1334206627168145408\tcreates\t0\nWed Dec 02 18:43:42 +0000 2020\t1334206627168145408\tan\t0\nWed Dec 02 18:43:42 +0000 2020\t1334206627168145408\temot…\t0\nWed Dec 02 18:43:42 +0000 2020\t1334206627168145408\thttps://t.co/8kmyefbori\t0\nWed Dec 02 18:43:43 +0000 2020\t1334206629462618113\tμπαλες\t0\nWed Dec 02 18:43:43 +0000 2020\t1334206629462618113\tμε\t0\nWed Dec 02 18:43:43 +0000 2020\t1334206629462618113\tτο\t0\nWed Dec 02 18:43:43 +0000 2020\t1334206629462618113\t#spotify\t0\nWed Dec 02 18:43:43 +0000 2020\t1334206629462618113\tρε\t0\nWed Dec 02 18:43:43 +0000 2020\t1334206629462618113\tμαλάκες\t0\nWed Dec 02 18:43:43 +0000 2020\t1334206629462618113\tγτχκτπς\t0\nWed Dec 02 18:44:05 +0000 2020\t1334206722836230147\trt\t0\nWed Dec 02 18:44:05 +0000 2020\t1334206722836230147\t@motzymadeit:\t0\nWed Dec 02 18:44:05 +0000 2020\t1334206722836230147\tthis\t0\nWed Dec 02 18:44:05 +0000 2020\t1334206722836230147\twas\t0\nWed Dec 02 18:44:05 +0000 2020\t1334206722836230147\tbig\t0\nWed Dec 02 18:44:05 +0000 2020\t1334206722836230147\tfor\t0\nWed Dec 02 18:44:05 +0000 2020\t1334206722836230147\t2020!\t0\nWed Dec 02 18:44:05 +0000 2020\t1334206722836230147\tthank\t1\nWed Dec 02 18:44:05 +0000 2020\t1334206722836230147\tyou\t0\nWed Dec 02 18:44:05 +0000 2020\t1334206722836230147\t@spotify!\t0\nWed Dec 02 18:44:05 +0000 2020\t1334206722836230147\ty’all\t0\nWed Dec 02 18:44:05 +0000 2020\t1334206722836230147\tkept\t0\nWed Dec 02 18:44:05 +0000 2020\t1334206722836230147\ttabs\t0\nWed Dec 02 18:44:05 +0000 2020\t1334206722836230147\ton\t0\nWed Dec 02 18:44:05 +0000 2020\t1334206722836230147\tya\t0\nWed Dec 02 18:44:05 +0000 2020\t1334206722836230147\tboy\t0\nWed Dec 02 18:44:05 +0000 2020\t1334206722836230147\tand\t0\nWed Dec 02 18:44:05 +0000 2020\t1334206722836230147\t@joindacrowd\t0\nWed Dec 02 18:44:05 +0000 2020\t1334206722836230147\tradio!\t0\nWed Dec 02 18:44:05 +0000 2020\t1334206722836230147\thttps://t.co/3fvarenz4t\t0\nWed Dec 02 18:44:05 +0000 2020\t1334206722836230147\t#spot…\t0\nWed Dec 02 18:44:09 +0000 2020\t1334206736870227969\trt\t0\nWed Dec 02 18:44:09 +0000 2020\t1334206736870227969\t@bts_graphs:\t0\nWed Dec 02 18:44:09 +0000 2020\t1334206736870227969\tmost\t0\nWed Dec 02 18:44:09 +0000 2020\t1334206736870227969\tstreamed\t0\nWed Dec 02 18:44:09 +0000 2020\t1334206736870227969\tartists\t0\nWed Dec 02 18:44:09 +0000 2020\t1334206736870227969\ton\t0\nWed Dec 02 18:44:09 +0000 2020\t1334206736870227969\tspotify\t0\nWed Dec 02 18:44:09 +0000 2020\t1334206736870227969\tfrom\t0\nWed Dec 02 18:44:09 +0000 2020\t1334206736870227969\t2017\t0\nWed Dec 02 18:44:09 +0000 2020\t1334206736870227969\tto\t0\nWed Dec 02 18:44:09 +0000 2020\t1334206736870227969\t2020  #bts\t0\nWed Dec 02 18:44:09 +0000 2020\t1334206736870227969\t#btsarmy\t0\nWed Dec 02 18:44:09 +0000 2020\t1334206736870227969\t#spotifywrapped\t0\nWed Dec 02 18:44:09 +0000 2020\t1334206736870227969\t#spotify\t0\nWed Dec 02 18:44:09 +0000 2020\t1334206736870227969\t@bts_twt\t0\nWed Dec 02 18:44:09 +0000 2020\t1334206736870227969\thttps://t.co/0dv5mm7kdf\t0\nWed Dec 02 18:44:10 +0000 2020\t1334206741962100736\trt\t0\nWed Dec 02 18:44:10 +0000 2020\t1334206741962100736\t@bts_graphs:\t0\nWed Dec 02 18:44:10 +0000 2020\t1334206741962100736\tmost\t0\nWed Dec 02 18:44:10 +0000 2020\t1334206741962100736\tstreamed\t0\nWed Dec 02 18:44:10 +0000 2020\t1334206741962100736\tartists\t0\nWed Dec 02 18:44:10 +0000 2020\t1334206741962100736\ton\t0\nWed Dec 02 18:44:10 +0000 2020\t1334206741962100736\tspotify\t0\nWed Dec 02 18:44:10 +0000 2020\t1334206741962100736\tfrom\t0\nWed Dec 02 18:44:10 +0000 2020\t1334206741962100736\t2017\t0\nWed Dec 02 18:44:10 +0000 2020\t1334206741962100736\tto\t0\nWed Dec 02 18:44:10 +0000 2020\t1334206741962100736\t2020  #bts\t0\nWed Dec 02 18:44:10 +0000 2020\t1334206741962100736\t#btsarmy\t0\nWed Dec 02 18:44:10 +0000 2020\t1334206741962100736\t#spotifywrapped\t0\nWed Dec 02 18:44:10 +0000 2020\t1334206741962100736\t#spotify\t0\nWed Dec 02 18:44:10 +0000 2020\t1334206741962100736\t@bts_twt\t0\nWed Dec 02 18:44:10 +0000 2020\t1334206741962100736\thttps://t.co/0dv5mm7kdf\t0\nWed Dec 02 18:44:11 +0000 2020\t1334206747389652993\t#2020wrapped\t0\nWed Dec 02 18:44:11 +0000 2020\t1334206747389652993\t#spotifywrapped2020\t0\nWed Dec 02 18:44:11 +0000 2020\t1334206747389652993\t#spotify\t0\nWed Dec 02 18:44:11 +0000 2020\t1334206747389652993\thttps://t.co/u3ivrhiqnh\t0\nWed Dec 02 18:39:13 +0000 2020\t1334205495587053573\tlooking\t0\nWed Dec 02 18:39:13 +0000 2020\t1334205495587053573\tforward\t0\nWed Dec 02 18:39:13 +0000 2020\t1334205495587053573\tand\t0\nWed Dec 02 18:39:13 +0000 2020\t1334205495587053573\thoping\t0\nWed Dec 02 18:39:13 +0000 2020\t1334205495587053573\twill\t1\nWed Dec 02 18:39:13 +0000 2020\t1334205495587053573\twill\t1\nWed Dec 02 18:39:13 +0000 2020\t1334205495587053573\tbe\t0\nWed Dec 02 18:39:13 +0000 2020\t1334205495587053573\table\t1\nWed Dec 02 18:39:13 +0000 2020\t1334205495587053573\tto\t0\nWed Dec 02 18:39:13 +0000 2020\t1334205495587053573\tshare\t0\nWed Dec 02 18:39:13 +0000 2020\t1334205495587053573\tthe\t0\nWed Dec 02 18:39:13 +0000 2020\t1334205495587053573\tmusic\t0\nWed Dec 02 18:39:13 +0000 2020\t1334205495587053573\ttogether\t0\nWed Dec 02 18:39:13 +0000 2020\t1334205495587053573\tat\t0\nWed Dec 02 18:39:13 +0000 2020\t1334205495587053573\ta\t0\nWed Dec 02 18:39:13 +0000 2020\t1334205495587053573\tlive\t1\nWed Dec 02 18:39:13 +0000 2020\t1334205495587053573\tgig\t0\nWed Dec 02 18:39:13 +0000 2020\t1334205495587053573\talong\t0\nWed Dec 02 18:39:13 +0000 2020\t1334205495587053573\twith\t0\nWed Dec 02 18:39:13 +0000 2020\t1334205495587053573\tyou\t0\nWed Dec 02 18:39:13 +0000 2020\t1334205495587053573\tand\t0\nWed Dec 02 18:39:13 +0000 2020\t1334205495587053573\tyour\t0\nWed Dec 02 18:39:13 +0000 2020\t1334205495587053573\tbrilliant…\t0\nWed Dec 02 18:39:13 +0000 2020\t1334205495587053573\thttps://t.co/lmvbo2n3z1\t0\nWed Dec 02 18:39:18 +0000 2020\t1334205519272177664\they! i\t0\nWed Dec 02 18:39:18 +0000 2020\t1334205519272177664\tam\t0\nWed Dec 02 18:39:18 +0000 2020\t1334205519272177664\tan\t0\nWed Dec 02 18:39:18 +0000 2020\t1334205519272177664\torganic\t0\nWed Dec 02 18:39:18 +0000 2020\t1334205519272177664\t#youtuber\t0\nWed Dec 02 18:39:18 +0000 2020\t1334205519272177664\tchannel\t0\nWed Dec 02 18:39:18 +0000 2020\t1334205519272177664\tand\t0\nWed Dec 02 18:39:18 +0000 2020\t1334205519272177664\tvideo\t0\nWed Dec 02 18:39:18 +0000 2020\t1334205519272177664\tpromoter.\t0\nWed Dec 02 18:39:18 +0000 2020\t1334205519272177664\ti\t0\nWed Dec 02 18:39:18 +0000 2020\t1334205519272177664\tcan\t0\nWed Dec 02 18:39:18 +0000 2020\t1334205519272177664\tpromote\t0\nWed Dec 02 18:39:18 +0000 2020\t1334205519272177664\tyour\t0\nWed Dec 02 18:39:18 +0000 2020\t1334205519272177664\tchannel\t0\nWed Dec 02 18:39:18 +0000 2020\t1334205519272177664\tvideo\t0\nWed Dec 02 18:39:18 +0000 2020\t1334205519272177664\t👉views\t0\nWed Dec 02 18:39:18 +0000 2020\t1334205519272177664\tand👉\t0\nWed Dec 02 18:39:18 +0000 2020\t1334205519272177664\tsubscriber…\t0\nWed Dec 02 18:39:18 +0000 2020\t1334205519272177664\thttps://t.co/rq9turmexu\t0\nWed Dec 02 18:37:30 +0000 2020\t1334205063431118850\trt\t0\nWed Dec 02 18:37:30 +0000 2020\t1334205063431118850\t@realsirtomjones:\t0\nWed Dec 02 18:37:30 +0000 2020\t1334205063431118850\tmusic\t0\nWed Dec 02 18:37:30 +0000 2020\t1334205063431118850\thas\t0\nWed Dec 02 18:37:30 +0000 2020\t1334205063431118850\tbeen\t0\nWed Dec 02 18:37:30 +0000 2020\t1334205063431118850\tthere\t0\nWed Dec 02 18:37:30 +0000 2020\t1334205063431118850\tfor\t0\nWed Dec 02 18:37:30 +0000 2020\t1334205063431118850\tus\t0\nWed Dec 02 18:37:30 +0000 2020\t1334205063431118850\tall\t0\nWed Dec 02 18:37:30 +0000 2020\t1334205063431118850\tthis\t0\nWed Dec 02 18:37:30 +0000 2020\t1334205063431118850\tyear!\t0\nWed Dec 02 18:37:30 +0000 2020\t1334205063431118850\tit\t0\nWed Dec 02 18:37:30 +0000 2020\t1334205063431118850\thas\t0\nWed Dec 02 18:37:30 +0000 2020\t1334205063431118850\tbrought\t0\nWed Dec 02 18:37:30 +0000 2020\t1334205063431118850\tgreat\t1\nWed Dec 02 18:37:30 +0000 2020\t1334205063431118850\tcomfort\t1\nWed Dec 02 18:37:30 +0000 2020\t1334205063431118850\tto\t0\nWed Dec 02 18:37:30 +0000 2020\t1334205063431118850\tme,\t0\nWed Dec 02 18:37:30 +0000 2020\t1334205063431118850\tso\t0\nWed Dec 02 18:37:30 +0000 2020\t1334205063431118850\tit\t0\nWed Dec 02 18:37:30 +0000 2020\t1334205063431118850\tis\t0\nWed Dec 02 18:37:30 +0000 2020\t1334205063431118850\thumbling\t-1\nWed Dec 02 18:37:30 +0000 2020\t1334205063431118850\tto\t0\nWed Dec 02 18:37:30 +0000 2020\t1334205063431118850\tsee\t0\nWed Dec 02 18:37:30 +0000 2020\t1334205063431118850\tso\t0\nWed Dec 02 18:37:30 +0000 2020\t1334205063431118850\tmany\t0\nWed Dec 02 18:37:30 +0000 2020\t1334205063431118850\tof\t0\nWed Dec 02 18:37:30 +0000 2020\t1334205063431118850\tyou…\t0\nWed Dec 02 18:37:32 +0000 2020\t1334205072490733573\t@collin_stanton\t0\nWed Dec 02 18:37:32 +0000 2020\t1334205072490733573\t@youtube\t0\nWed Dec 02 18:37:32 +0000 2020\t1334205072490733573\they! i\t0\nWed Dec 02 18:37:32 +0000 2020\t1334205072490733573\tam\t0\nWed Dec 02 18:37:32 +0000 2020\t1334205072490733573\tan\t0\nWed Dec 02 18:37:32 +0000 2020\t1334205072490733573\torganic\t0\nWed Dec 02 18:37:32 +0000 2020\t1334205072490733573\t#youtuber\t0\nWed Dec 02 18:37:32 +0000 2020\t1334205072490733573\tchannel\t0\nWed Dec 02 18:37:32 +0000 2020\t1334205072490733573\tand\t0\nWed Dec 02 18:37:32 +0000 2020\t1334205072490733573\tvideo\t0\nWed Dec 02 18:37:32 +0000 2020\t1334205072490733573\tpromoter.\t0\nWed Dec 02 18:37:32 +0000 2020\t1334205072490733573\ti\t0\nWed Dec 02 18:37:32 +0000 2020\t1334205072490733573\tcan\t0\nWed Dec 02 18:37:32 +0000 2020\t1334205072490733573\tpromote\t0\nWed Dec 02 18:37:32 +0000 2020\t1334205072490733573\tyour\t0\nWed Dec 02 18:37:32 +0000 2020\t1334205072490733573\tchannel\t0\nWed Dec 02 18:37:32 +0000 2020\t1334205072490733573\tvide…\t0\nWed Dec 02 18:37:32 +0000 2020\t1334205072490733573\thttps://t.co/bttr8tdxrv\t0\nWed Dec 02 18:37:32 +0000 2020\t1334205075057729538\tgrateful\t1\nWed Dec 02 18:37:32 +0000 2020\t1334205075057729538\tgrateful\t1\nWed Dec 02 18:37:32 +0000 2020\t1334205075057729538\tfor\t0\nWed Dec 02 18:37:32 +0000 2020\t1334205075057729538\teverything\t0\nWed Dec 02 18:37:32 +0000 2020\t1334205075057729538\tthis\t0\nWed Dec 02 18:37:32 +0000 2020\t1334205075057729538\tyear\t0\nWed Dec 02 18:37:32 +0000 2020\t1334205075057729538\teven\t1\nWed Dec 02 18:37:32 +0000 2020\t1334205075057729538\tin\t0\nWed Dec 02 18:37:32 +0000 2020\t1334205075057729538\tthese\t0\nWed Dec 02 18:37:32 +0000 2020\t1334205075057729538\tcircumstances\t0\nWed Dec 02 18:37:32 +0000 2020\t1334205075057729538\t#spotifywrapped\t0\nWed Dec 02 18:37:32 +0000 2020\t1334205075057729538\t#spotify\t0\nWed Dec 02 18:37:32 +0000 2020\t1334205075057729538\thttps://t.co/0sa5kndjfv\t0\nWed Dec 02 18:37:33 +0000 2020\t1334205078908129289\thahahahaha\t0\nWed Dec 02 18:37:33 +0000 2020\t1334205078908129289\tabout\t0\nWed Dec 02 18:37:33 +0000 2020\t1334205078908129289\tright\t1\nWed Dec 02 18:37:33 +0000 2020\t1334205078908129289\tright\t1\nWed Dec 02 18:37:33 +0000 2020\t1334205078908129289\tright\t1\nWed Dec 02 18:37:33 +0000 2020\t1334205078908129289\thaha\t0\nWed Dec 02 18:37:33 +0000 2020\t1334205078908129289\t #thejoker\t0\nWed Dec 02 18:37:33 +0000 2020\t1334205078908129289\t#mrj\t0\nWed Dec 02 18:37:33 +0000 2020\t1334205078908129289\t#spotify\t0\nWed Dec 02 18:37:33 +0000 2020\t1334205078908129289\t#canada\t0\nWed Dec 02 18:37:33 +0000 2020\t1334205078908129289\t#canadian\t0\nWed Dec 02 18:37:33 +0000 2020\t1334205078908129289\t#nerd\t0\nWed Dec 02 18:37:33 +0000 2020\t1334205078908129289\t#🃏\t0\nWed Dec 02 18:37:33 +0000 2020\t1334205078908129289\thttps://t.co/naygqrmzvt\t0\nWed Dec 02 18:38:06 +0000 2020\t1334205215705325577\tcheck\t0\nWed Dec 02 18:38:06 +0000 2020\t1334205215705325577\tout\t0\nWed Dec 02 18:38:06 +0000 2020\t1334205215705325577\tmy\t0\nWed Dec 02 18:38:06 +0000 2020\t1334205215705325577\tgig\t0\nWed Dec 02 18:38:06 +0000 2020\t1334205215705325577\ton\t0\nWed Dec 02 18:38:06 +0000 2020\t1334205215705325577\tfiverr:\t0\nWed Dec 02 18:38:06 +0000 2020\t1334205215705325577\ti\t0\nWed Dec 02 18:38:06 +0000 2020\t1334205215705325577\twill\t1\nWed Dec 02 18:38:06 +0000 2020\t1334205215705325577\twill\t1\nWed Dec 02 18:38:06 +0000 2020\t1334205215705325577\tcreate\t0\nWed Dec 02 18:38:06 +0000 2020\t1334205215705325577\ta\t0\nWed Dec 02 18:38:06 +0000 2020\t1334205215705325577\tgeometric\t0\nWed Dec 02 18:38:06 +0000 2020\t1334205215705325577\tand\t0\nWed Dec 02 18:38:06 +0000 2020\t1334205215705325577\tpolygonal\t0\nWed Dec 02 18:38:06 +0000 2020\t1334205215705325577\tanimal\t0\nWed Dec 02 18:38:06 +0000 2020\t1334205215705325577\tlogo\t0\nWed Dec 02 18:38:06 +0000 2020\t1334205215705325577\t#louisissuccessful\t0\nWed Dec 02 18:38:06 +0000 2020\t1334205215705325577\t#vitedacopertina…\t0\nWed Dec 02 18:38:06 +0000 2020\t1334205215705325577\thttps://t.co/mrdfk2krmr\t0\nWed Dec 02 18:38:07 +0000 2020\t1334205219375345664\t#spotify\t0\nWed Dec 02 18:38:07 +0000 2020\t1334205219375345664\t https://t.co/ikzmru6hxh\t0\nWed Dec 02 18:38:07 +0000 2020\t1334205220881129473\tmi\t0\nWed Dec 02 18:38:07 +0000 2020\t1334205220881129473\tcanción\t0\nWed Dec 02 18:38:07 +0000 2020\t1334205220881129473\tfavorita\t0\nWed Dec 02 18:38:07 +0000 2020\t1334205220881129473\tsegún\t0\nWed Dec 02 18:38:07 +0000 2020\t1334205220881129473\t#spotify\t0\nWed Dec 02 18:38:07 +0000 2020\t1334205220881129473\t❤️\t0\nWed Dec 02 18:38:07 +0000 2020\t1334205220881129473\thttps://t.co/c2tetqh8sc\t0\nWed Dec 02 18:45:58 +0000 2020\t1334207197736300549\td\t0\nWed Dec 02 18:45:58 +0000 2020\t1334207197736300549\tmarz\t0\nWed Dec 02 18:45:58 +0000 2020\t1334207197736300549\t“love\t0\nWed Dec 02 18:45:58 +0000 2020\t1334207197736300549\t&amp;\t0\nWed Dec 02 18:45:58 +0000 2020\t1334207197736300549\tdrugs” available\t0\nWed Dec 02 18:45:58 +0000 2020\t1334207197736300549\ton\t0\nWed Dec 02 18:45:58 +0000 2020\t1334207197736300549\tall\t0\nWed Dec 02 18:45:58 +0000 2020\t1334207197736300549\tplatforms\t0\nWed Dec 02 18:45:58 +0000 2020\t1334207197736300549\tnow\t0\nWed Dec 02 18:45:58 +0000 2020\t1334207197736300549\tgo\t0\nWed Dec 02 18:45:58 +0000 2020\t1334207197736300549\tlisten\t0\nWed Dec 02 18:45:58 +0000 2020\t1334207197736300549\t&amp;\t0\nWed Dec 02 18:45:58 +0000 2020\t1334207197736300549\tstream\t0\nWed Dec 02 18:45:58 +0000 2020\t1334207197736300549\teverywhere\t0\nWed Dec 02 18:45:58 +0000 2020\t1334207197736300549\tnow\t0\nWed Dec 02 18:45:58 +0000 2020\t1334207197736300549\t!\t0\nWed Dec 02 18:45:58 +0000 2020\t1334207197736300549\tlink\t0\nWed Dec 02 18:45:58 +0000 2020\t1334207197736300549\tin\t0\nWed Dec 02 18:45:58 +0000 2020\t1334207197736300549\tbio.\t0\nWed Dec 02 18:45:58 +0000 2020\t1334207197736300549\t  damn\t0\nWed Dec 02 18:45:58 +0000 2020\t1334207197736300549\tthat’s…\t0\nWed Dec 02 18:45:58 +0000 2020\t1334207197736300549\thttps://t.co/fodkkefxoh\t0\nWed Dec 02 18:46:07 +0000 2020\t1334207233899565062\tgreesha\t0\nWed Dec 02 18:46:07 +0000 2020\t1334207233899565062\t-\t0\nWed Dec 02 18:46:07 +0000 2020\t1334207233899565062\tcome\t0\nWed Dec 02 18:46:07 +0000 2020\t1334207233899565062\tback\t1\nWed Dec 02 18:46:07 +0000 2020\t1334207233899565062\thome\t0\nWed Dec 02 18:46:07 +0000 2020\t1334207233899565062\t/\t0\nWed Dec 02 18:46:07 +0000 2020\t1334207233899565062\tmy\t0\nWed Dec 02 18:46:07 +0000 2020\t1334207233899565062\tmood\t0\nWed Dec 02 18:46:07 +0000 2020\t1334207233899565062\ttoday\t0\nWed Dec 02 18:46:07 +0000 2020\t1334207233899565062\t🙂 • • • waiting\t0\nWed Dec 02 18:46:07 +0000 2020\t1334207233899565062\tfor\t0\nWed Dec 02 18:46:07 +0000 2020\t1334207233899565062\tmy\t0\nWed Dec 02 18:46:07 +0000 2020\t1334207233899565062\tnew\t0\nWed Dec 02 18:46:07 +0000 2020\t1334207233899565062\treleases\t0\nWed Dec 02 18:46:07 +0000 2020\t1334207233899565062\tstay\t0\nWed Dec 02 18:46:07 +0000 2020\t1334207233899565062\ttuned\t0\nWed Dec 02 18:46:07 +0000 2020\t1334207233899565062\t • • • #independentartist…\t0\nWed Dec 02 18:46:07 +0000 2020\t1334207233899565062\thttps://t.co/xlspcbqbdi\t0\nWed Dec 02 18:45:05 +0000 2020\t1334206973437485062\tnew\t0\nWed Dec 02 18:45:05 +0000 2020\t1334206973437485062\tmonth,\t0\nWed Dec 02 18:45:05 +0000 2020\t1334206973437485062\tnew\t0\nWed Dec 02 18:45:05 +0000 2020\t1334206973437485062\tstack\t0\nWed Dec 02 18:45:05 +0000 2020\t1334206973437485062\tpack\t0\nWed Dec 02 18:45:05 +0000 2020\t1334206973437485062\t#30!\t0\nWed Dec 02 18:45:05 +0000 2020\t1334206973437485062\tthis\t0\nWed Dec 02 18:45:05 +0000 2020\t1334206973437485062\tplaylist\t0\nWed Dec 02 18:45:05 +0000 2020\t1334206973437485062\tis\t0\nWed Dec 02 18:45:05 +0000 2020\t1334206973437485062\ton\t0\nWed Dec 02 18:45:05 +0000 2020\t1334206973437485062\tspotify\t0\nWed Dec 02 18:45:05 +0000 2020\t1334206973437485062\t&amp;\t0\nWed Dec 02 18:45:05 +0000 2020\t1334206973437485062\tyoutube!\t0\nWed Dec 02 18:45:05 +0000 2020\t1334206973437485062\tfilled\t0\nWed Dec 02 18:45:05 +0000 2020\t1334206973437485062\twith\t0\nWed Dec 02 18:45:05 +0000 2020\t1334206973437485062\tover\t0\nWed Dec 02 18:45:05 +0000 2020\t1334206973437485062\t7\t0\nWed Dec 02 18:45:05 +0000 2020\t1334206973437485062\thours\t0\nWed Dec 02 18:45:05 +0000 2020\t1334206973437485062\tof\t0\nWed Dec 02 18:45:05 +0000 2020\t1334206973437485062\tnew\t0\nWed Dec 02 18:45:05 +0000 2020\t1334206973437485062\tmusic\t0\nWed Dec 02 18:45:05 +0000 2020\t1334206973437485062\tall\t0\nWed Dec 02 18:45:05 +0000 2020\t1334206973437485062\tin…\t0\nWed Dec 02 18:45:05 +0000 2020\t1334206973437485062\thttps://t.co/gv8xyuwixr\t0\nWed Dec 02 18:45:17 +0000 2020\t1334207023743950851\trt\t0\nWed Dec 02 18:45:17 +0000 2020\t1334207023743950851\t@imampoliss:\t0\nWed Dec 02 18:45:17 +0000 2020\t1334207023743950851\teskilerden\t0\nWed Dec 02 18:45:17 +0000 2020\t1334207023743950851\tanılar\t0\nWed Dec 02 18:45:17 +0000 2020\t1334207023743950851\t🤣🤣 yalarım\t0\nWed Dec 02 18:45:17 +0000 2020\t1334207023743950851\terdoğan'ı\t0\nWed Dec 02 18:45:17 +0000 2020\t1334207023743950851\tısırırım\t0\nWed Dec 02 18:45:17 +0000 2020\t1334207023743950851\t🤣🤣🤣 #yks2021\t0\nWed Dec 02 18:45:17 +0000 2020\t1334207023743950851\t#corona\t0\nWed Dec 02 18:45:17 +0000 2020\t1334207023743950851\t#yks2022\t0\nWed Dec 02 18:45:17 +0000 2020\t1334207023743950851\t#yks2021tayfa\t0\nWed Dec 02 18:45:17 +0000 2020\t1334207023743950851\t#2021yks\t0\nWed Dec 02 18:45:17 +0000 2020\t1334207023743950851\t#2020wrapped\t0\nWed Dec 02 18:45:17 +0000 2020\t1334207023743950851\t#spotify…\t0\nWed Dec 02 18:45:18 +0000 2020\t1334207029561462791\t#2020wrapped\t0\nWed Dec 02 18:45:18 +0000 2020\t1334207029561462791\t#spotifywrapped\t0\nWed Dec 02 18:45:18 +0000 2020\t1334207029561462791\t#spotify\t0\nWed Dec 02 18:45:18 +0000 2020\t1334207029561462791\t#jo1\t0\nWed Dec 02 18:45:18 +0000 2020\t1334207029561462791\t#redvelvet https://t.co/zhfqjgw4kc\t0\nWed Dec 02 18:45:18 +0000 2020\t1334207029569744897\t@facciadaculo01\t0\nWed Dec 02 18:45:18 +0000 2020\t1334207029569744897\t@youtube\t0\nWed Dec 02 18:45:18 +0000 2020\t1334207029569744897\they! i\t0\nWed Dec 02 18:45:18 +0000 2020\t1334207029569744897\tam\t0\nWed Dec 02 18:45:18 +0000 2020\t1334207029569744897\tan\t0\nWed Dec 02 18:45:18 +0000 2020\t1334207029569744897\torganic\t0\nWed Dec 02 18:45:18 +0000 2020\t1334207029569744897\t#youtuber\t0\nWed Dec 02 18:45:18 +0000 2020\t1334207029569744897\tchannel\t0\nWed Dec 02 18:45:18 +0000 2020\t1334207029569744897\tand\t0\nWed Dec 02 18:45:18 +0000 2020\t1334207029569744897\tvideo\t0\nWed Dec 02 18:45:18 +0000 2020\t1334207029569744897\tpromoter.\t0\nWed Dec 02 18:45:18 +0000 2020\t1334207029569744897\ti\t0\nWed Dec 02 18:45:18 +0000 2020\t1334207029569744897\tcan\t0\nWed Dec 02 18:45:18 +0000 2020\t1334207029569744897\tpromote\t0\nWed Dec 02 18:45:18 +0000 2020\t1334207029569744897\tyour\t0\nWed Dec 02 18:45:18 +0000 2020\t1334207029569744897\tchannel\t0\nWed Dec 02 18:45:18 +0000 2020\t1334207029569744897\tvide…\t0\nWed Dec 02 18:45:18 +0000 2020\t1334207029569744897\thttps://t.co/9oieflvppx\t0\nWed Dec 02 18:45:20 +0000 2020\t1334207035978735622\trt\t0\nWed Dec 02 18:45:20 +0000 2020\t1334207035978735622\t@motzymadeit:\t0\nWed Dec 02 18:45:20 +0000 2020\t1334207035978735622\tthis\t0\nWed Dec 02 18:45:20 +0000 2020\t1334207035978735622\twas\t0\nWed Dec 02 18:45:20 +0000 2020\t1334207035978735622\tbig\t0\nWed Dec 02 18:45:20 +0000 2020\t1334207035978735622\tfor\t0\nWed Dec 02 18:45:20 +0000 2020\t1334207035978735622\t2020!\t0\nWed Dec 02 18:45:20 +0000 2020\t1334207035978735622\tthank\t1\nWed Dec 02 18:45:20 +0000 2020\t1334207035978735622\tyou\t0\nWed Dec 02 18:45:20 +0000 2020\t1334207035978735622\t@spotify!\t0\nWed Dec 02 18:45:20 +0000 2020\t1334207035978735622\ty’all\t0\nWed Dec 02 18:45:20 +0000 2020\t1334207035978735622\tkept\t0\nWed Dec 02 18:45:20 +0000 2020\t1334207035978735622\ttabs\t0\nWed Dec 02 18:45:20 +0000 2020\t1334207035978735622\ton\t0\nWed Dec 02 18:45:20 +0000 2020\t1334207035978735622\tya\t0\nWed Dec 02 18:45:20 +0000 2020\t1334207035978735622\tboy\t0\nWed Dec 02 18:45:20 +0000 2020\t1334207035978735622\tand\t0\nWed Dec 02 18:45:20 +0000 2020\t1334207035978735622\t@joindacrowd\t0\nWed Dec 02 18:45:20 +0000 2020\t1334207035978735622\tradio!\t0\nWed Dec 02 18:45:20 +0000 2020\t1334207035978735622\thttps://t.co/3fvarenz4t\t0\nWed Dec 02 18:45:20 +0000 2020\t1334207035978735622\t#spot…\t0\nWed Dec 02 18:45:21 +0000 2020\t1334207042567942145\t#pfizer\t0\nWed Dec 02 18:45:21 +0000 2020\t1334207042567942145\t #الجامعة_اليسوعية\t0\nWed Dec 02 18:45:21 +0000 2020\t1334207042567942145\t #شوقر_دادي\t0\nWed Dec 02 18:45:21 +0000 2020\t1334207042567942145\t #uaenationalday\t0\nWed Dec 02 18:45:21 +0000 2020\t1334207042567942145\t #من_ذكريات_البلوتوث\t0\nWed Dec 02 18:45:21 +0000 2020\t1334207042567942145\t #رياض_سلامة\t0\nWed Dec 02 18:45:21 +0000 2020\t1334207042567942145\t #جامعة_جدة_تخاطر_بطلابها…\t0\nWed Dec 02 18:45:21 +0000 2020\t1334207042567942145\thttps://t.co/tzspjaqwid\t0\nWed Dec 02 18:46:20 +0000 2020\t1334207289725739024\trt\t0\nWed Dec 02 18:46:20 +0000 2020\t1334207289725739024\t@somosconectarte:\t0\nWed Dec 02 18:46:20 +0000 2020\t1334207289725739024\tles\t0\nWed Dec 02 18:46:20 +0000 2020\t1334207289725739024\tcompartimos\t0\nWed Dec 02 18:46:20 +0000 2020\t1334207289725739024\tcon\t0\nWed Dec 02 18:46:20 +0000 2020\t1334207289725739024\tmucho\t0\nWed Dec 02 18:46:20 +0000 2020\t1334207289725739024\torgullo\t0\nWed Dec 02 18:46:20 +0000 2020\t1334207289725739024\tque\t0\nWed Dec 02 18:46:20 +0000 2020\t1334207289725739024\tnuestro\t0\nWed Dec 02 18:46:20 +0000 2020\t1334207289725739024\t#podcast\t0\nWed Dec 02 18:46:20 +0000 2020\t1334207289725739024\t#sobreexpuestoshow💥\t0\nWed Dec 02 18:46:20 +0000 2020\t1334207289725739024\tforma\t0\nWed Dec 02 18:46:20 +0000 2020\t1334207289725739024\tparte\t0\nWed Dec 02 18:46:20 +0000 2020\t1334207289725739024\tde\t0\nWed Dec 02 18:46:20 +0000 2020\t1334207289725739024\tlos\t0\nWed Dec 02 18:46:20 +0000 2020\t1334207289725739024\t50\t0\nWed Dec 02 18:46:20 +0000 2020\t1334207289725739024\tpodcast\t0\nWed Dec 02 18:46:20 +0000 2020\t1334207289725739024\tmás\t0\nWed Dec 02 18:46:20 +0000 2020\t1334207289725739024\tescuchado…\t0\nWed Dec 02 18:46:23 +0000 2020\t1334207301075480576\t#spotify\t0\nWed Dec 02 18:46:23 +0000 2020\t1334207301075480576\tdice\t0\nWed Dec 02 18:46:23 +0000 2020\t1334207301075480576\tque\t0\nWed Dec 02 18:46:23 +0000 2020\t1334207301075480576\tme\t0\nWed Dec 02 18:46:23 +0000 2020\t1334207301075480576\tla\t0\nWed Dec 02 18:46:23 +0000 2020\t1334207301075480576\tpase\t0\nWed Dec 02 18:46:23 +0000 2020\t1334207301075480576\tescuchado\t0\nWed Dec 02 18:46:23 +0000 2020\t1334207301075480576\tesa\t0\nWed Dec 02 18:46:23 +0000 2020\t1334207301075480576\tguea\t0\nWed Dec 02 18:46:23 +0000 2020\t1334207301075480576\tde\t0\nWed Dec 02 18:46:23 +0000 2020\t1334207301075480576\t#budbunny\t0\nWed Dec 02 18:46:23 +0000 2020\t1334207301075480576\ty\t0\nWed Dec 02 18:46:23 +0000 2020\t1334207301075480576\tmentira,\t0\nWed Dec 02 18:46:23 +0000 2020\t1334207301075480576\tjamas\t0\nWed Dec 02 18:46:23 +0000 2020\t1334207301075480576\tme\t0\nWed Dec 02 18:46:23 +0000 2020\t1334207301075480576\tgusto\t1\nWed Dec 02 18:46:23 +0000 2020\t1334207301075480576\tese\t0\nWed Dec 02 18:46:23 +0000 2020\t1334207301075480576\testilo\t0\nWed Dec 02 18:46:23 +0000 2020\t1334207301075480576\tde\t0\nWed Dec 02 18:46:23 +0000 2020\t1334207301075480576\tmusica\t0\nWed Dec 02 18:46:23 +0000 2020\t1334207301075480576\tde\t0\nWed Dec 02 18:46:23 +0000 2020\t1334207301075480576\thech…\t0\nWed Dec 02 18:46:23 +0000 2020\t1334207301075480576\thttps://t.co/ebgoxuvijb\t0\nWed Dec 02 18:44:28 +0000 2020\t1334206820286668804\trt\t0\nWed Dec 02 18:44:28 +0000 2020\t1334206820286668804\t@karinabeorlegui:\t0\nWed Dec 02 18:44:28 +0000 2020\t1334206820286668804\tgracias\t0\nWed Dec 02 18:44:28 +0000 2020\t1334206820286668804\t@hernanielapi\t0\nWed Dec 02 18:44:28 +0000 2020\t1334206820286668804\t!\t0\nWed Dec 02 18:44:28 +0000 2020\t1334206820286668804\thttps://t.co/nzoiosryfz\t0\nWed Dec 02 18:40:36 +0000 2020\t1334205845718978560\tlooking\t0\nWed Dec 02 18:40:36 +0000 2020\t1334205845718978560\tfor\t0\nWed Dec 02 18:40:36 +0000 2020\t1334205845718978560\ta\t0\nWed Dec 02 18:40:36 +0000 2020\t1334205845718978560\tcustom\t0\nWed Dec 02 18:40:36 +0000 2020\t1334205845718978560\t&amp;\t0\nWed Dec 02 18:40:36 +0000 2020\t1334205845718978560\ttrendy\t1\nWed Dec 02 18:40:36 +0000 2020\t1334205845718978560\tt-shirt\t0\nWed Dec 02 18:40:36 +0000 2020\t1334205845718978560\tdesign? check\t0\nWed Dec 02 18:40:36 +0000 2020\t1334205845718978560\tthe\t0\nWed Dec 02 18:40:36 +0000 2020\t1334205845718978560\tlink-https://t.co/tjtnpilxkl  #tshirt\t0\nWed Dec 02 18:40:36 +0000 2020\t1334205845718978560\t#unique\t0\nWed Dec 02 18:40:36 +0000 2020\t1334205845718978560\t#typography…\t0\nWed Dec 02 18:40:36 +0000 2020\t1334205845718978560\thttps://t.co/2u9cmqjevw\t0\nWed Dec 02 18:40:43 +0000 2020\t1334205872755548161\t@mayouthisyoursx\t0\nWed Dec 02 18:40:43 +0000 2020\t1334205872755548161\t@youtube\t0\nWed Dec 02 18:40:43 +0000 2020\t1334205872755548161\they! i\t0\nWed Dec 02 18:40:43 +0000 2020\t1334205872755548161\tam\t0\nWed Dec 02 18:40:43 +0000 2020\t1334205872755548161\tan\t0\nWed Dec 02 18:40:43 +0000 2020\t1334205872755548161\torganic\t0\nWed Dec 02 18:40:43 +0000 2020\t1334205872755548161\t#youtuber\t0\nWed Dec 02 18:40:43 +0000 2020\t1334205872755548161\tchannel\t0\nWed Dec 02 18:40:43 +0000 2020\t1334205872755548161\tand\t0\nWed Dec 02 18:40:43 +0000 2020\t1334205872755548161\tvideo\t0\nWed Dec 02 18:40:43 +0000 2020\t1334205872755548161\tpromoter.\t0\nWed Dec 02 18:40:43 +0000 2020\t1334205872755548161\ti\t0\nWed Dec 02 18:40:43 +0000 2020\t1334205872755548161\tcan\t0\nWed Dec 02 18:40:43 +0000 2020\t1334205872755548161\tpromote\t0\nWed Dec 02 18:40:43 +0000 2020\t1334205872755548161\tyour\t0\nWed Dec 02 18:40:43 +0000 2020\t1334205872755548161\tchannel\t0\nWed Dec 02 18:40:43 +0000 2020\t1334205872755548161\tvid…\t0\nWed Dec 02 18:40:43 +0000 2020\t1334205872755548161\thttps://t.co/bqa0gya14e\t0\nWed Dec 02 18:40:47 +0000 2020\t1334205891801968646\tbu\t0\nWed Dec 02 18:40:47 +0000 2020\t1334205891801968646\tyıl\t0\nWed Dec 02 18:40:47 +0000 2020\t1334205891801968646\tda\t0\nWed Dec 02 18:40:47 +0000 2020\t1334205891801968646\truhum\t0\nWed Dec 02 18:40:47 +0000 2020\t1334205891801968646\tisyankar\t0\nWed Dec 02 18:40:47 +0000 2020\t1334205891801968646\t😂\t0\nWed Dec 02 18:40:47 +0000 2020\t1334205891801968646\t #spotify\t0\nWed Dec 02 18:40:47 +0000 2020\t1334205891801968646\t#sagopakajmer\t0\nWed Dec 02 18:40:47 +0000 2020\t1334205891801968646\t#şanışer\t0\nWed Dec 02 18:40:47 +0000 2020\t1334205891801968646\thttps://t.co/zzqwfvdy6j\t0\nWed Dec 02 18:40:48 +0000 2020\t1334205896654692352\t@salty616\t0\nWed Dec 02 18:40:48 +0000 2020\t1334205896654692352\t@xgamerenergy\t0\nWed Dec 02 18:40:48 +0000 2020\t1334205896654692352\they! i\t0\nWed Dec 02 18:40:48 +0000 2020\t1334205896654692352\tam\t0\nWed Dec 02 18:40:48 +0000 2020\t1334205896654692352\tan\t0\nWed Dec 02 18:40:48 +0000 2020\t1334205896654692352\torganic\t0\nWed Dec 02 18:40:48 +0000 2020\t1334205896654692352\t#youtuber\t0\nWed Dec 02 18:40:48 +0000 2020\t1334205896654692352\tchannel\t0\nWed Dec 02 18:40:48 +0000 2020\t1334205896654692352\tand\t0\nWed Dec 02 18:40:48 +0000 2020\t1334205896654692352\tvideo\t0\nWed Dec 02 18:40:48 +0000 2020\t1334205896654692352\tpromoter.\t0\nWed Dec 02 18:40:48 +0000 2020\t1334205896654692352\ti\t0\nWed Dec 02 18:40:48 +0000 2020\t1334205896654692352\tcan\t0\nWed Dec 02 18:40:48 +0000 2020\t1334205896654692352\tpromote\t0\nWed Dec 02 18:40:48 +0000 2020\t1334205896654692352\tyour\t0\nWed Dec 02 18:40:48 +0000 2020\t1334205896654692352\tchannel\t0\nWed Dec 02 18:40:48 +0000 2020\t1334205896654692352\tvideo…\t0\nWed Dec 02 18:40:48 +0000 2020\t1334205896654692352\thttps://t.co/bswxz9z6e8\t0\nWed Dec 02 18:40:50 +0000 2020\t1334205902589726720\tnew\t0\nWed Dec 02 18:40:50 +0000 2020\t1334205902589726720\talbum!!!!\t0\nWed Dec 02 18:40:50 +0000 2020\t1334205902589726720\t“pandemonium\t0\nWed Dec 02 18:40:50 +0000 2020\t1334205902589726720\t“\t0\nWed Dec 02 18:40:50 +0000 2020\t1334205902589726720\tepidemic\t-1\nWed Dec 02 18:40:50 +0000 2020\t1334205902589726720\toutrage\t-1\nWed Dec 02 18:40:50 +0000 2020\t1334205902589726720\toutrage\t-1\nWed Dec 02 18:40:50 +0000 2020\t1334205902589726720\ton\t0\nWed Dec 02 18:40:50 +0000 2020\t1334205902589726720\tall!!\t0\nWed Dec 02 18:40:50 +0000 2020\t1334205902589726720\tplatforms\t0\nWed Dec 02 18:40:50 +0000 2020\t1334205902589726720\t#epidemicoutrage\t0\nWed Dec 02 18:40:50 +0000 2020\t1334205902589726720\t#pandemonium\t0\nWed Dec 02 18:40:50 +0000 2020\t1334205902589726720\t#independentartist…\t0\nWed Dec 02 18:40:50 +0000 2020\t1334205902589726720\thttps://t.co/wz4uzwxqsi\t0\nWed Dec 02 18:40:57 +0000 2020\t1334205934185238528\they! i\t0\nWed Dec 02 18:40:57 +0000 2020\t1334205934185238528\tam\t0\nWed Dec 02 18:40:57 +0000 2020\t1334205934185238528\tan\t0\nWed Dec 02 18:40:57 +0000 2020\t1334205934185238528\torganic\t0\nWed Dec 02 18:40:57 +0000 2020\t1334205934185238528\t#youtuber\t0\nWed Dec 02 18:40:57 +0000 2020\t1334205934185238528\tchannel\t0\nWed Dec 02 18:40:57 +0000 2020\t1334205934185238528\tand\t0\nWed Dec 02 18:40:57 +0000 2020\t1334205934185238528\tvideo\t0\nWed Dec 02 18:40:57 +0000 2020\t1334205934185238528\tpromoter.\t0\nWed Dec 02 18:40:57 +0000 2020\t1334205934185238528\ti\t0\nWed Dec 02 18:40:57 +0000 2020\t1334205934185238528\tcan\t0\nWed Dec 02 18:40:57 +0000 2020\t1334205934185238528\tpromote\t0\nWed Dec 02 18:40:57 +0000 2020\t1334205934185238528\tyour\t0\nWed Dec 02 18:40:57 +0000 2020\t1334205934185238528\tchannel\t0\nWed Dec 02 18:40:57 +0000 2020\t1334205934185238528\tvideo\t0\nWed Dec 02 18:40:57 +0000 2020\t1334205934185238528\t👉views\t0\nWed Dec 02 18:40:57 +0000 2020\t1334205934185238528\tand👉\t0\nWed Dec 02 18:40:57 +0000 2020\t1334205934185238528\tsubscriber…\t0\nWed Dec 02 18:40:57 +0000 2020\t1334205934185238528\thttps://t.co/elqk5fieqy\t0\nWed Dec 02 18:41:03 +0000 2020\t1334205957010718720\t@erdnaxela3000\t0\nWed Dec 02 18:41:03 +0000 2020\t1334205957010718720\t@youtube\t0\nWed Dec 02 18:41:03 +0000 2020\t1334205957010718720\they! i\t0\nWed Dec 02 18:41:03 +0000 2020\t1334205957010718720\tam\t0\nWed Dec 02 18:41:03 +0000 2020\t1334205957010718720\tan\t0\nWed Dec 02 18:41:03 +0000 2020\t1334205957010718720\torganic\t0\nWed Dec 02 18:41:03 +0000 2020\t1334205957010718720\t#youtuber\t0\nWed Dec 02 18:41:03 +0000 2020\t1334205957010718720\tchannel\t0\nWed Dec 02 18:41:03 +0000 2020\t1334205957010718720\tand\t0\nWed Dec 02 18:41:03 +0000 2020\t1334205957010718720\tvideo\t0\nWed Dec 02 18:41:03 +0000 2020\t1334205957010718720\tpromoter.\t0\nWed Dec 02 18:41:03 +0000 2020\t1334205957010718720\ti\t0\nWed Dec 02 18:41:03 +0000 2020\t1334205957010718720\tcan\t0\nWed Dec 02 18:41:03 +0000 2020\t1334205957010718720\tpromote\t0\nWed Dec 02 18:41:03 +0000 2020\t1334205957010718720\tyour\t0\nWed Dec 02 18:41:03 +0000 2020\t1334205957010718720\tchannel\t0\nWed Dec 02 18:41:03 +0000 2020\t1334205957010718720\tvideo…\t0\nWed Dec 02 18:41:03 +0000 2020\t1334205957010718720\thttps://t.co/tagld6sy2w\t0\nWed Dec 02 18:41:03 +0000 2020\t1334205959107801088\trt\t0\nWed Dec 02 18:41:03 +0000 2020\t1334205959107801088\t@poppourreview:\t0\nWed Dec 02 18:41:03 +0000 2020\t1334205959107801088\t#newepisodealert\t0\nWed Dec 02 18:41:03 +0000 2020\t1334205959107801088\tour\t0\nWed Dec 02 18:41:03 +0000 2020\t1334205959107801088\tnew\t0\nWed Dec 02 18:41:03 +0000 2020\t1334205959107801088\tepisode\t0\nWed Dec 02 18:41:03 +0000 2020\t1334205959107801088\t\"make\t0\nWed Dec 02 18:41:03 +0000 2020\t1334205959107801088\tthe\t0\nWed Dec 02 18:41:03 +0000 2020\t1334205959107801088\tyuletide\t0\nWed Dec 02 18:41:03 +0000 2020\t1334205959107801088\tgay”,\t0\nWed Dec 02 18:41:03 +0000 2020\t1334205959107801088\tour\t0\nWed Dec 02 18:41:03 +0000 2020\t1334205959107801088\treview\t0\nWed Dec 02 18:41:03 +0000 2020\t1334205959107801088\tof\t0\nWed Dec 02 18:41:03 +0000 2020\t1334205959107801088\t#happiestseason,\t0\nWed Dec 02 18:41:03 +0000 2020\t1334205959107801088\tas\t0\nWed Dec 02 18:41:03 +0000 2020\t1334205959107801088\tpart\t0\nWed Dec 02 18:41:03 +0000 2020\t1334205959107801088\tof\t0\nWed Dec 02 18:41:03 +0000 2020\t1334205959107801088\tour\t0\nWed Dec 02 18:41:03 +0000 2020\t1334205959107801088\t#christmas\t0\nWed Dec 02 18:41:03 +0000 2020\t1334205959107801088\tserie…\t0\nWed Dec 02 18:41:04 +0000 2020\t1334205963801407493\t📷\t0\nWed Dec 02 18:41:04 +0000 2020\t1334205963801407493\tsmall\t0\nWed Dec 02 18:41:04 +0000 2020\t1334205963801407493\tsteps\t0\nWed Dec 02 18:41:04 +0000 2020\t1334205963801407493\tbut\t0\nWed Dec 02 18:41:04 +0000 2020\t1334205963801407493\tdefinitely\t1\nWed Dec 02 18:41:04 +0000 2020\t1334205963801407493\tsteps!\t0\nWed Dec 02 18:41:04 +0000 2020\t1334205963801407493\tlots\t0\nWed Dec 02 18:41:04 +0000 2020\t1334205963801407493\tof\t0\nWed Dec 02 18:41:04 +0000 2020\t1334205963801407493\tgains\t0\nWed Dec 02 18:41:04 +0000 2020\t1334205963801407493\tin\t0\nWed Dec 02 18:41:04 +0000 2020\t1334205963801407493\t2020!\t0\nWed Dec 02 18:41:04 +0000 2020\t1334205963801407493\t#spotify\t0\nWed Dec 02 18:41:04 +0000 2020\t1334205963801407493\t#spotifywrapped\t0\nWed Dec 02 18:41:04 +0000 2020\t1334205963801407493\t#spotifywrapped2020…\t0\nWed Dec 02 18:41:04 +0000 2020\t1334205963801407493\thttps://t.co/sz6ntb333c\t0\nWed Dec 02 18:41:06 +0000 2020\t1334205969685901313\tthank\t1\nWed Dec 02 18:41:06 +0000 2020\t1334205969685901313\tyou\t0\nWed Dec 02 18:41:06 +0000 2020\t1334205969685901313\tfor\t0\nWed Dec 02 18:41:06 +0000 2020\t1334205969685901313\tall\t0\nWed Dec 02 18:41:06 +0000 2020\t1334205969685901313\tthe\t0\nWed Dec 02 18:41:06 +0000 2020\t1334205969685901313\tsupport\t1\nWed Dec 02 18:41:06 +0000 2020\t1334205969685901313\tsupport\t1\nWed Dec 02 18:41:06 +0000 2020\t1334205969685901313\tsupport\t1\nWed Dec 02 18:41:06 +0000 2020\t1334205969685901313\tand\t0\nWed Dec 02 18:41:06 +0000 2020\t1334205969685901313\tkeep\t0\nWed Dec 02 18:41:06 +0000 2020\t1334205969685901313\tthem\t0\nWed Dec 02 18:41:06 +0000 2020\t1334205969685901313\tcoming\t0\nWed Dec 02 18:41:06 +0000 2020\t1334205969685901313\t🙏\t0\nWed Dec 02 18:41:06 +0000 2020\t1334205969685901313\t❤\t0\nWed Dec 02 18:41:06 +0000 2020\t1334205969685901313\t #blessed\t0\nWed Dec 02 18:41:06 +0000 2020\t1334205969685901313\t@spotifypodcasts #2020podcasterwrapped…\t0\nWed Dec 02 18:41:06 +0000 2020\t1334205969685901313\thttps://t.co/wcwjx6bgxf\t0\nWed Dec 02 18:41:07 +0000 2020\t1334205974463217667\t@uptownsquirrel1\t0\nWed Dec 02 18:41:07 +0000 2020\t1334205974463217667\t@youtube\t0\nWed Dec 02 18:41:07 +0000 2020\t1334205974463217667\t@angelof61776445\t0\nWed Dec 02 18:41:07 +0000 2020\t1334205974463217667\they! i\t0\nWed Dec 02 18:41:07 +0000 2020\t1334205974463217667\tam\t0\nWed Dec 02 18:41:07 +0000 2020\t1334205974463217667\tan\t0\nWed Dec 02 18:41:07 +0000 2020\t1334205974463217667\torganic\t0\nWed Dec 02 18:41:07 +0000 2020\t1334205974463217667\t#youtuber\t0\nWed Dec 02 18:41:07 +0000 2020\t1334205974463217667\tchannel\t0\nWed Dec 02 18:41:07 +0000 2020\t1334205974463217667\tand\t0\nWed Dec 02 18:41:07 +0000 2020\t1334205974463217667\tvideo\t0\nWed Dec 02 18:41:07 +0000 2020\t1334205974463217667\tpromoter.\t0\nWed Dec 02 18:41:07 +0000 2020\t1334205974463217667\ti\t0\nWed Dec 02 18:41:07 +0000 2020\t1334205974463217667\tcan\t0\nWed Dec 02 18:41:07 +0000 2020\t1334205974463217667\tpromote…\t0\nWed Dec 02 18:41:07 +0000 2020\t1334205974463217667\thttps://t.co/dwqboajbnm\t0\nWed Dec 02 18:43:50 +0000 2020\t1334206659703410688\t@gizoooderlerr\t0\nWed Dec 02 18:43:50 +0000 2020\t1334206659703410688\t@youtube\t0\nWed Dec 02 18:43:50 +0000 2020\t1334206659703410688\they! i\t0\nWed Dec 02 18:43:50 +0000 2020\t1334206659703410688\tam\t0\nWed Dec 02 18:43:50 +0000 2020\t1334206659703410688\tan\t0\nWed Dec 02 18:43:50 +0000 2020\t1334206659703410688\torganic\t0\nWed Dec 02 18:43:50 +0000 2020\t1334206659703410688\t#youtuber\t0\nWed Dec 02 18:43:50 +0000 2020\t1334206659703410688\tchannel\t0\nWed Dec 02 18:43:50 +0000 2020\t1334206659703410688\tand\t0\nWed Dec 02 18:43:50 +0000 2020\t1334206659703410688\tvideo\t0\nWed Dec 02 18:43:50 +0000 2020\t1334206659703410688\tpromoter.\t0\nWed Dec 02 18:43:50 +0000 2020\t1334206659703410688\ti\t0\nWed Dec 02 18:43:50 +0000 2020\t1334206659703410688\tcan\t0\nWed Dec 02 18:43:50 +0000 2020\t1334206659703410688\tpromote\t0\nWed Dec 02 18:43:50 +0000 2020\t1334206659703410688\tyour\t0\nWed Dec 02 18:43:50 +0000 2020\t1334206659703410688\tchannel\t0\nWed Dec 02 18:43:50 +0000 2020\t1334206659703410688\tvideo…\t0\nWed Dec 02 18:43:50 +0000 2020\t1334206659703410688\thttps://t.co/vy2rxcb5px\t0\nWed Dec 02 18:43:51 +0000 2020\t1334206663784607745\trt\t0\nWed Dec 02 18:43:51 +0000 2020\t1334206663784607745\t@motzymadeit:\t0\nWed Dec 02 18:43:51 +0000 2020\t1334206663784607745\tthis\t0\nWed Dec 02 18:43:51 +0000 2020\t1334206663784607745\twas\t0\nWed Dec 02 18:43:51 +0000 2020\t1334206663784607745\tbig\t0\nWed Dec 02 18:43:51 +0000 2020\t1334206663784607745\tfor\t0\nWed Dec 02 18:43:51 +0000 2020\t1334206663784607745\t2020!\t0\nWed Dec 02 18:43:51 +0000 2020\t1334206663784607745\tthank\t1\nWed Dec 02 18:43:51 +0000 2020\t1334206663784607745\tyou\t0\nWed Dec 02 18:43:51 +0000 2020\t1334206663784607745\t@spotify!\t0\nWed Dec 02 18:43:51 +0000 2020\t1334206663784607745\ty’all\t0\nWed Dec 02 18:43:51 +0000 2020\t1334206663784607745\tkept\t0\nWed Dec 02 18:43:51 +0000 2020\t1334206663784607745\ttabs\t0\nWed Dec 02 18:43:51 +0000 2020\t1334206663784607745\ton\t0\nWed Dec 02 18:43:51 +0000 2020\t1334206663784607745\tya\t0\nWed Dec 02 18:43:51 +0000 2020\t1334206663784607745\tboy\t0\nWed Dec 02 18:43:51 +0000 2020\t1334206663784607745\tand\t0\nWed Dec 02 18:43:51 +0000 2020\t1334206663784607745\t@joindacrowd\t0\nWed Dec 02 18:43:51 +0000 2020\t1334206663784607745\tradio!\t0\nWed Dec 02 18:43:51 +0000 2020\t1334206663784607745\thttps://t.co/3fvarenz4t\t0\nWed Dec 02 18:43:51 +0000 2020\t1334206663784607745\t#spot…\t0\nWed Dec 02 18:43:54 +0000 2020\t1334206673586593792\t@dave_gregson1\t0\nWed Dec 02 18:43:54 +0000 2020\t1334206673586593792\t@youtube\t0\nWed Dec 02 18:43:54 +0000 2020\t1334206673586593792\they! i\t0\nWed Dec 02 18:43:54 +0000 2020\t1334206673586593792\tam\t0\nWed Dec 02 18:43:54 +0000 2020\t1334206673586593792\tan\t0\nWed Dec 02 18:43:54 +0000 2020\t1334206673586593792\torganic\t0\nWed Dec 02 18:43:54 +0000 2020\t1334206673586593792\t#youtuber\t0\nWed Dec 02 18:43:54 +0000 2020\t1334206673586593792\tchannel\t0\nWed Dec 02 18:43:54 +0000 2020\t1334206673586593792\tand\t0\nWed Dec 02 18:43:54 +0000 2020\t1334206673586593792\tvideo\t0\nWed Dec 02 18:43:54 +0000 2020\t1334206673586593792\tpromoter.\t0\nWed Dec 02 18:43:54 +0000 2020\t1334206673586593792\ti\t0\nWed Dec 02 18:43:54 +0000 2020\t1334206673586593792\tcan\t0\nWed Dec 02 18:43:54 +0000 2020\t1334206673586593792\tpromote\t0\nWed Dec 02 18:43:54 +0000 2020\t1334206673586593792\tyour\t0\nWed Dec 02 18:43:54 +0000 2020\t1334206673586593792\tchannel\t0\nWed Dec 02 18:43:54 +0000 2020\t1334206673586593792\tvideo…\t0\nWed Dec 02 18:43:54 +0000 2020\t1334206673586593792\thttps://t.co/poyhgjsbp5\t0\nWed Dec 02 18:43:53 +0000 2020\t1334206673221664769\tanother\t0\nWed Dec 02 18:43:53 +0000 2020\t1334206673221664769\tyear\t0\nWed Dec 02 18:43:53 +0000 2020\t1334206673221664769\taround\t0\nWed Dec 02 18:43:53 +0000 2020\t1334206673221664769\tthe\t0\nWed Dec 02 18:43:53 +0000 2020\t1334206673221664769\tsun!!\t0\nWed Dec 02 18:43:53 +0000 2020\t1334206673221664769\tthank\t1\nWed Dec 02 18:43:53 +0000 2020\t1334206673221664769\tyall\t0\nWed Dec 02 18:43:53 +0000 2020\t1334206673221664769\tso\t0\nWed Dec 02 18:43:53 +0000 2020\t1334206673221664769\tmuch\t0\nWed Dec 02 18:43:53 +0000 2020\t1334206673221664769\tfor\t0\nWed Dec 02 18:43:53 +0000 2020\t1334206673221664769\trocking\t0\nWed Dec 02 18:43:53 +0000 2020\t1334206673221664769\twith\t0\nWed Dec 02 18:43:53 +0000 2020\t1334206673221664769\tme\t0\nWed Dec 02 18:43:53 +0000 2020\t1334206673221664769\tand\t0\nWed Dec 02 18:43:53 +0000 2020\t1334206673221664769\tshout\t0\nWed Dec 02 18:43:53 +0000 2020\t1334206673221664769\tout\t0\nWed Dec 02 18:43:53 +0000 2020\t1334206673221664769\tto\t0\nWed Dec 02 18:43:53 +0000 2020\t1334206673221664769\tthe\t0\nWed Dec 02 18:43:53 +0000 2020\t1334206673221664769\tcollaborators\t0\nWed Dec 02 18:43:53 +0000 2020\t1334206673221664769\tive\t0\nWed Dec 02 18:43:53 +0000 2020\t1334206673221664769\tworked…\t0\nWed Dec 02 18:43:53 +0000 2020\t1334206673221664769\thttps://t.co/j1fwbiczoj\t0\nWed Dec 02 18:43:55 +0000 2020\t1334206681928982548\thee\t0\nWed Dec 02 18:43:55 +0000 2020\t1334206681928982548\thee\t0\nWed Dec 02 18:43:55 +0000 2020\t1334206681928982548\tman\t0\nWed Dec 02 18:43:55 +0000 2020\t1334206681928982548\tis\t0\nWed Dec 02 18:43:55 +0000 2020\t1334206681928982548\tmy\t0\nWed Dec 02 18:43:55 +0000 2020\t1334206681928982548\ttop\t1\nWed Dec 02 18:43:55 +0000 2020\t1334206681928982548\tartist\t0\nWed Dec 02 18:43:55 +0000 2020\t1334206681928982548\tthis\t0\nWed Dec 02 18:43:55 +0000 2020\t1334206681928982548\tyear\t0\nWed Dec 02 18:43:55 +0000 2020\t1334206681928982548\t😂\t0\nWed Dec 02 18:43:55 +0000 2020\t1334206681928982548\t#spotify\t0\nWed Dec 02 18:47:51 +0000 2020\t1334207671122194432\td\t0\nWed Dec 02 18:47:51 +0000 2020\t1334207671122194432\tmarz\t0\nWed Dec 02 18:47:51 +0000 2020\t1334207671122194432\t“love\t0\nWed Dec 02 18:47:51 +0000 2020\t1334207671122194432\t&amp;\t0\nWed Dec 02 18:47:51 +0000 2020\t1334207671122194432\tdrugs” available\t0\nWed Dec 02 18:47:51 +0000 2020\t1334207671122194432\ton\t0\nWed Dec 02 18:47:51 +0000 2020\t1334207671122194432\tall\t0\nWed Dec 02 18:47:51 +0000 2020\t1334207671122194432\tplatforms\t0\nWed Dec 02 18:47:51 +0000 2020\t1334207671122194432\tnow\t0\nWed Dec 02 18:47:51 +0000 2020\t1334207671122194432\tgo\t0\nWed Dec 02 18:47:51 +0000 2020\t1334207671122194432\tlisten\t0\nWed Dec 02 18:47:51 +0000 2020\t1334207671122194432\t&amp;\t0\nWed Dec 02 18:47:51 +0000 2020\t1334207671122194432\tstream\t0\nWed Dec 02 18:47:51 +0000 2020\t1334207671122194432\teverywhere\t0\nWed Dec 02 18:47:51 +0000 2020\t1334207671122194432\tnow\t0\nWed Dec 02 18:47:51 +0000 2020\t1334207671122194432\t!\t0\nWed Dec 02 18:47:51 +0000 2020\t1334207671122194432\tlink\t0\nWed Dec 02 18:47:51 +0000 2020\t1334207671122194432\tin\t0\nWed Dec 02 18:47:51 +0000 2020\t1334207671122194432\tbio.\t0\nWed Dec 02 18:47:51 +0000 2020\t1334207671122194432\t  damn\t0\nWed Dec 02 18:47:51 +0000 2020\t1334207671122194432\tthat’s…\t0\nWed Dec 02 18:47:51 +0000 2020\t1334207671122194432\thttps://t.co/ewvp4aabet\t0\nWed Dec 02 18:47:52 +0000 2020\t1334207672791552001\tis\t0\nWed Dec 02 18:47:52 +0000 2020\t1334207672791552001\tthis\t0\nWed Dec 02 18:47:52 +0000 2020\t1334207672791552001\tthe\t0\nWed Dec 02 18:47:52 +0000 2020\t1334207672791552001\t1%\t0\nWed Dec 02 18:47:52 +0000 2020\t1334207672791552001\teveryone’s\t0\nWed Dec 02 18:47:52 +0000 2020\t1334207672791552001\talways\t0\nWed Dec 02 18:47:52 +0000 2020\t1334207672791552001\ttalking\t0\nWed Dec 02 18:47:52 +0000 2020\t1334207672791552001\tabout?\t0\nWed Dec 02 18:47:52 +0000 2020\t1334207672791552001\t@arianagrande\t0\nWed Dec 02 18:47:52 +0000 2020\t1334207672791552001\treal\t1\nWed Dec 02 18:47:52 +0000 2020\t1334207672791552001\trecognize\t0\nWed Dec 02 18:47:52 +0000 2020\t1334207672791552001\treal\t1\nWed Dec 02 18:47:52 +0000 2020\t1334207672791552001\t🌝🦮#2020wrapped\t0\nWed Dec 02 18:47:52 +0000 2020\t1334207672791552001\t#spotify\t0\nWed Dec 02 18:47:52 +0000 2020\t1334207672791552001\thttps://t.co/bu7znoxswv\t0\nWed Dec 02 18:47:54 +0000 2020\t1334207682895634435\tget\t0\nWed Dec 02 18:47:54 +0000 2020\t1334207682895634435\tyour\t0\nWed Dec 02 18:47:54 +0000 2020\t1334207682895634435\tproducts\t0\nWed Dec 02 18:47:54 +0000 2020\t1334207682895634435\tand\t0\nWed Dec 02 18:47:54 +0000 2020\t1334207682895634435\tservices\t0\nWed Dec 02 18:47:54 +0000 2020\t1334207682895634435\tout\t0\nWed Dec 02 18:47:54 +0000 2020\t1334207682895634435\tto\t0\nWed Dec 02 18:47:54 +0000 2020\t1334207682895634435\tlarge\t0\nWed Dec 02 18:47:54 +0000 2020\t1334207682895634435\tlarge\t1\nWed Dec 02 18:47:54 +0000 2020\t1334207682895634435\tlarge\t1\nWed Dec 02 18:47:54 +0000 2020\t1334207682895634435\taudience\t0\nWed Dec 02 18:47:54 +0000 2020\t1334207682895634435\tby\t0\nWed Dec 02 18:47:54 +0000 2020\t1334207682895634435\tsending\t0\nWed Dec 02 18:47:54 +0000 2020\t1334207682895634435\temail\t0\nWed Dec 02 18:47:54 +0000 2020\t1334207682895634435\tcampaigns\t0\nWed Dec 02 18:47:54 +0000 2020\t1334207682895634435\tand\t0\nWed Dec 02 18:47:54 +0000 2020\t1334207682895634435\tsetting\t0\nWed Dec 02 18:47:54 +0000 2020\t1334207682895634435\tup\t0\nWed Dec 02 18:47:54 +0000 2020\t1334207682895634435\ttriggered\t0\nWed Dec 02 18:47:54 +0000 2020\t1334207682895634435\tautomatio…\t0\nWed Dec 02 18:47:54 +0000 2020\t1334207682895634435\thttps://t.co/0umoqam1fq\t0\nWed Dec 02 18:41:16 +0000 2020\t1334206012107206664\tit's\t0\nWed Dec 02 18:41:16 +0000 2020\t1334206012107206664\ta\t0\nWed Dec 02 18:41:16 +0000 2020\t1334206012107206664\twrap!\t0\nWed Dec 02 18:41:16 +0000 2020\t1334206012107206664\tthank\t1\nWed Dec 02 18:41:16 +0000 2020\t1334206012107206664\tyou\t0\nWed Dec 02 18:41:16 +0000 2020\t1334206012107206664\tto\t0\nWed Dec 02 18:41:16 +0000 2020\t1334206012107206664\teveryone\t0\nWed Dec 02 18:41:16 +0000 2020\t1334206012107206664\tthat\t0\nWed Dec 02 18:41:16 +0000 2020\t1334206012107206664\tlistened\t0\nWed Dec 02 18:41:16 +0000 2020\t1334206012107206664\tto\t0\nWed Dec 02 18:41:16 +0000 2020\t1334206012107206664\tus.\t0\nWed Dec 02 18:41:16 +0000 2020\t1334206012107206664\tit\t0\nWed Dec 02 18:41:16 +0000 2020\t1334206012107206664\tmeans\t0\nWed Dec 02 18:41:16 +0000 2020\t1334206012107206664\ta\t0\nWed Dec 02 18:41:16 +0000 2020\t1334206012107206664\tlot.\t0\nWed Dec 02 18:41:16 +0000 2020\t1334206012107206664\thuggs\t0\nWed Dec 02 18:41:16 +0000 2020\t1334206012107206664\tand\t0\nWed Dec 02 18:41:16 +0000 2020\t1334206012107206664\tkisses\t0\nWed Dec 02 18:41:16 +0000 2020\t1334206012107206664\t😘\t0\nWed Dec 02 18:41:16 +0000 2020\t1334206012107206664\t #rock\t0\nWed Dec 02 18:41:16 +0000 2020\t1334206012107206664\t#punk\t0\nWed Dec 02 18:41:16 +0000 2020\t1334206012107206664\t#indie…\t0\nWed Dec 02 18:41:16 +0000 2020\t1334206012107206664\thttps://t.co/hh9lvxwuvc\t0\nWed Dec 02 18:41:17 +0000 2020\t1334206016150507521\t\"on\t0\nWed Dec 02 18:41:17 +0000 2020\t1334206016150507521\tyour\t0\nWed Dec 02 18:41:17 +0000 2020\t1334206016150507521\tmind\" лучший\t0\nWed Dec 02 18:41:17 +0000 2020\t1334206016150507521\tтрек\t0\nWed Dec 02 18:41:17 +0000 2020\t1334206016150507521\tэтого\t0\nWed Dec 02 18:41:17 +0000 2020\t1334206016150507521\tгода,\t0\nWed Dec 02 18:41:17 +0000 2020\t1334206016150507521\tкоторый\t0\nWed Dec 02 18:41:17 +0000 2020\t1334206016150507521\tмаксимально\t0\nWed Dec 02 18:41:17 +0000 2020\t1334206016150507521\tчасто\t0\nWed Dec 02 18:41:17 +0000 2020\t1334206016150507521\tу\t0\nWed Dec 02 18:41:17 +0000 2020\t1334206016150507521\tменя\t0\nWed Dec 02 18:41:17 +0000 2020\t1334206016150507521\tна\t0\nWed Dec 02 18:41:17 +0000 2020\t1334206016150507521\tрепите\t0\nWed Dec 02 18:41:17 +0000 2020\t1334206016150507521\tс\t0\nWed Dec 02 18:41:17 +0000 2020\t1334206016150507521\tмарта\t0\nWed Dec 02 18:41:17 +0000 2020\t1334206016150507521\t2020,\t0\nWed Dec 02 18:41:17 +0000 2020\t1334206016150507521\tещё\t0\nWed Dec 02 18:41:17 +0000 2020\t1334206016150507521\tдо\t0\nWed Dec 02 18:41:17 +0000 2020\t1334206016150507521\tиспользовани…\t0\nWed Dec 02 18:41:17 +0000 2020\t1334206016150507521\thttps://t.co/y81rtkacdt\t0\nWed Dec 02 18:41:17 +0000 2020\t1334206018985725953\t@2sheenz\t0\nWed Dec 02 18:41:17 +0000 2020\t1334206018985725953\they! i\t0\nWed Dec 02 18:41:17 +0000 2020\t1334206018985725953\tam\t0\nWed Dec 02 18:41:17 +0000 2020\t1334206018985725953\tan\t0\nWed Dec 02 18:41:17 +0000 2020\t1334206018985725953\torganic\t0\nWed Dec 02 18:41:17 +0000 2020\t1334206018985725953\t#youtuber\t0\nWed Dec 02 18:41:17 +0000 2020\t1334206018985725953\tchannel\t0\nWed Dec 02 18:41:17 +0000 2020\t1334206018985725953\tand\t0\nWed Dec 02 18:41:17 +0000 2020\t1334206018985725953\tvideo\t0\nWed Dec 02 18:41:17 +0000 2020\t1334206018985725953\tpromoter.\t0\nWed Dec 02 18:41:17 +0000 2020\t1334206018985725953\ti\t0\nWed Dec 02 18:41:17 +0000 2020\t1334206018985725953\tcan\t0\nWed Dec 02 18:41:17 +0000 2020\t1334206018985725953\tpromote\t0\nWed Dec 02 18:41:17 +0000 2020\t1334206018985725953\tyour\t0\nWed Dec 02 18:41:17 +0000 2020\t1334206018985725953\tchannel\t0\nWed Dec 02 18:41:17 +0000 2020\t1334206018985725953\tvideo\t0\nWed Dec 02 18:41:17 +0000 2020\t1334206018985725953\t👉views\t0\nWed Dec 02 18:41:17 +0000 2020\t1334206018985725953\tand👉\t0\nWed Dec 02 18:41:17 +0000 2020\t1334206018985725953\tsu…\t0\nWed Dec 02 18:41:17 +0000 2020\t1334206018985725953\thttps://t.co/sghcgwnts1\t0\nWed Dec 02 18:41:19 +0000 2020\t1334206024283267072\tthank\t1\nWed Dec 02 18:41:19 +0000 2020\t1334206024283267072\tyou\t0\nWed Dec 02 18:41:19 +0000 2020\t1334206024283267072\tto\t0\nWed Dec 02 18:41:19 +0000 2020\t1334206024283267072\tall\t0\nWed Dec 02 18:41:19 +0000 2020\t1334206024283267072\tof\t0\nWed Dec 02 18:41:19 +0000 2020\t1334206024283267072\tour\t0\nWed Dec 02 18:41:19 +0000 2020\t1334206024283267072\t#spotify\t0\nWed Dec 02 18:41:19 +0000 2020\t1334206024283267072\tlisteners!\t0\nWed Dec 02 18:41:19 +0000 2020\t1334206024283267072\thave\t0\nWed Dec 02 18:41:19 +0000 2020\t1334206024283267072\tyou\t0\nWed Dec 02 18:41:19 +0000 2020\t1334206024283267072\tfollowed\t0\nWed Dec 02 18:41:19 +0000 2020\t1334206024283267072\tus\t0\nWed Dec 02 18:41:19 +0000 2020\t1334206024283267072\ton\t0\nWed Dec 02 18:41:19 +0000 2020\t1334206024283267072\tspotify\t0\nWed Dec 02 18:41:19 +0000 2020\t1334206024283267072\tyet?\t0\nWed Dec 02 18:41:19 +0000 2020\t1334206024283267072\tif\t0\nWed Dec 02 18:41:19 +0000 2020\t1334206024283267072\tnot,\t0\nWed Dec 02 18:41:19 +0000 2020\t1334206024283267072\tdo\t0\nWed Dec 02 18:41:19 +0000 2020\t1334206024283267072\tit\t0\nWed Dec 02 18:41:19 +0000 2020\t1334206024283267072\ttoday!\t0\nWed Dec 02 18:41:19 +0000 2020\t1334206024283267072\t🖤\t0\nWed Dec 02 18:41:19 +0000 2020\t1334206024283267072\tcomment\t0\nWed Dec 02 18:41:19 +0000 2020\t1334206024283267072\tcomment\t0\nWed Dec 02 18:41:19 +0000 2020\t1334206024283267072\tbac…\t0\nWed Dec 02 18:41:19 +0000 2020\t1334206024283267072\thttps://t.co/wth9qqxs7h\t0\nWed Dec 02 18:41:21 +0000 2020\t1334206034144092163\tadoro\t0\nWed Dec 02 18:41:21 +0000 2020\t1334206034144092163\ttodo\t0\nWed Dec 02 18:41:21 +0000 2020\t1334206034144092163\tmundo\t0\nWed Dec 02 18:41:21 +0000 2020\t1334206034144092163\tdivulgando\t0\nWed Dec 02 18:41:21 +0000 2020\t1334206034144092163\ta\t0\nWed Dec 02 18:41:21 +0000 2020\t1334206034144092163\tretrospectiva\t0\nWed Dec 02 18:41:21 +0000 2020\t1334206034144092163\tdo\t0\nWed Dec 02 18:41:21 +0000 2020\t1334206034144092163\t#spotify.\t0\nWed Dec 02 18:41:21 +0000 2020\t1334206034144092163\tquem\t0\nWed Dec 02 18:41:21 +0000 2020\t1334206034144092163\tvai\t0\nWed Dec 02 18:41:21 +0000 2020\t1334206034144092163\tcontar\t0\nWed Dec 02 18:41:21 +0000 2020\t1334206034144092163\tpra\t0\nWed Dec 02 18:41:21 +0000 2020\t1334206034144092163\tesse\t0\nWed Dec 02 18:41:21 +0000 2020\t1334206034144092163\tpovo\t0\nWed Dec 02 18:41:21 +0000 2020\t1334206034144092163\tque\t0\nWed Dec 02 18:41:21 +0000 2020\t1334206034144092163\tninguém,\t0\nWed Dec 02 18:41:21 +0000 2020\t1334206034144092163\talém\t0\nWed Dec 02 18:41:21 +0000 2020\t1334206034144092163\tdeles\t0\nWed Dec 02 18:41:21 +0000 2020\t1334206034144092163\tmesm…\t0\nWed Dec 02 18:41:21 +0000 2020\t1334206034144092163\thttps://t.co/cl7wtqrtgn\t0\nWed Dec 02 18:41:30 +0000 2020\t1334206072156868608\t@museofragua\t0\nWed Dec 02 18:41:30 +0000 2020\t1334206072156868608\t@youtube\t0\nWed Dec 02 18:41:30 +0000 2020\t1334206072156868608\they! i\t0\nWed Dec 02 18:41:30 +0000 2020\t1334206072156868608\tam\t0\nWed Dec 02 18:41:30 +0000 2020\t1334206072156868608\tan\t0\nWed Dec 02 18:41:30 +0000 2020\t1334206072156868608\torganic\t0\nWed Dec 02 18:41:30 +0000 2020\t1334206072156868608\t#youtuber\t0\nWed Dec 02 18:41:30 +0000 2020\t1334206072156868608\tchannel\t0\nWed Dec 02 18:41:30 +0000 2020\t1334206072156868608\tand\t0\nWed Dec 02 18:41:30 +0000 2020\t1334206072156868608\tvideo\t0\nWed Dec 02 18:41:30 +0000 2020\t1334206072156868608\tpromoter.\t0\nWed Dec 02 18:41:30 +0000 2020\t1334206072156868608\ti\t0\nWed Dec 02 18:41:30 +0000 2020\t1334206072156868608\tcan\t0\nWed Dec 02 18:41:30 +0000 2020\t1334206072156868608\tpromote\t0\nWed Dec 02 18:41:30 +0000 2020\t1334206072156868608\tyour\t0\nWed Dec 02 18:41:30 +0000 2020\t1334206072156868608\tchannel\t0\nWed Dec 02 18:41:30 +0000 2020\t1334206072156868608\tvideo\t0\nWed Dec 02 18:41:30 +0000 2020\t1334206072156868608\t👉…\t0\nWed Dec 02 18:41:30 +0000 2020\t1334206072156868608\thttps://t.co/ejmlnrt46z\t0\nWed Dec 02 18:41:30 +0000 2020\t1334206072542826499\tplaylistอะไร\t0\nWed Dec 02 18:41:30 +0000 2020\t1334206072542826499\tฟังแล้วน้ำตาไหลถึงตีน 1\t0\nWed Dec 02 18:41:30 +0000 2020\t1334206072542826499\tปี\t0\nWed Dec 02 18:41:30 +0000 2020\t1334206072542826499\tมี\t0\nWed Dec 02 18:41:30 +0000 2020\t1334206072542826499\t12เดือน\t0\nWed Dec 02 18:41:30 +0000 2020\t1334206072542826499\tกุอกหักไปแล้ว\t0\nWed Dec 02 18:41:30 +0000 2020\t1334206072542826499\t11เดือน\t0\nWed Dec 02 18:41:30 +0000 2020\t1334206072542826499\t3วัน #spotify\t0\nWed Dec 02 18:41:30 +0000 2020\t1334206072542826499\t#2020wrapped\t0\nWed Dec 02 18:41:30 +0000 2020\t1334206072542826499\t  \t0\nWed Dec 02 18:41:30 +0000 2020\t1334206072542826499\thttps://t.co/13rdo0chhj\t0\nWed Dec 02 18:41:33 +0000 2020\t1334206084488130560\ta\t0\nWed Dec 02 18:41:33 +0000 2020\t1334206084488130560\tdesign\t0\nWed Dec 02 18:41:33 +0000 2020\t1334206084488130560\tfor\t0\nWed Dec 02 18:41:33 +0000 2020\t1334206084488130560\tlife\t0\nWed Dec 02 18:41:33 +0000 2020\t1334206084488130560\tby\t0\nWed Dec 02 18:41:33 +0000 2020\t1334206084488130560\tmanic\t-1\nWed Dec 02 18:41:33 +0000 2020\t1334206084488130560\tstreet\t0\nWed Dec 02 18:41:33 +0000 2020\t1334206084488130560\tpreachers https://t.co/jxgf5i5drz  #spotify\t0\nWed Dec 02 18:41:33 +0000 2020\t1334206084488130560\t#music\t0\nWed Dec 02 18:48:13 +0000 2020\t1334207763694690316\trt\t0\nWed Dec 02 18:48:13 +0000 2020\t1334207763694690316\t@rypped2:\t0\nWed Dec 02 18:48:13 +0000 2020\t1334207763694690316\tsuper\t1\nWed Dec 02 18:48:13 +0000 2020\t1334207763694690316\texcited\t1\nWed Dec 02 18:48:13 +0000 2020\t1334207763694690316\tthat\t0\nWed Dec 02 18:48:13 +0000 2020\t1334207763694690316\tour\t0\nWed Dec 02 18:48:13 +0000 2020\t1334207763694690316\tdebut\t0\nWed Dec 02 18:48:13 +0000 2020\t1334207763694690316\tsingle\t0\nWed Dec 02 18:48:13 +0000 2020\t1334207763694690316\t‘water’\t0\nWed Dec 02 18:48:13 +0000 2020\t1334207763694690316\twill\t1\nWed Dec 02 18:48:13 +0000 2020\t1334207763694690316\twill\t1\nWed Dec 02 18:48:13 +0000 2020\t1334207763694690316\tbe\t0\nWed Dec 02 18:48:13 +0000 2020\t1334207763694690316\tplayed\t0\nWed Dec 02 18:48:13 +0000 2020\t1334207763694690316\tthis\t0\nWed Dec 02 18:48:13 +0000 2020\t1334207763694690316\tsaturday\t0\nWed Dec 02 18:48:13 +0000 2020\t1334207763694690316\t5\t0\nWed Dec 02 18:48:13 +0000 2020\t1334207763694690316\tdecember\t0\nWed Dec 02 18:48:13 +0000 2020\t1334207763694690316\ton\t0\nWed Dec 02 18:48:13 +0000 2020\t1334207763694690316\tbbc\t0\nWed Dec 02 18:48:13 +0000 2020\t1334207763694690316\tmusic\t0\nWed Dec 02 18:48:13 +0000 2020\t1334207763694690316\tintroducing\t0\nWed Dec 02 18:48:13 +0000 2020\t1334207763694690316\ton\t0\n"
           }
         ]
-      }
+      },
+      "apps": [],
+      "runtimeInfos": {},
+      "progressUpdateIntervalMs": 500,
+      "jobName": "paragraph_1606664466913_1713851091",
+      "id": "paragraph_1606664466913_1713851091",
+      "dateCreated": "2020-11-29T16:41:06+0100",
+      "dateStarted": "2020-12-11T15:56:53+0100",
+      "dateFinished": "2020-12-11T15:56:55+0100",
+      "status": "FINISHED",
+      "$$hashKey": "object:27977"
     },
     {
       "user": "anonymous",
@@ -2654,8 +2685,7 @@
       "id": "paragraph_1607698613276_1244104144",
       "dateCreated": "2020-12-11T15:56:53+0100",
       "status": "READY",
-      "focus": true,
-      "$$hashKey": "object:27389"
+      "$$hashKey": "object:27978"
     }
   ],
   "name": "2020s1_goktug_asci",
