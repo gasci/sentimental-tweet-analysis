@@ -1,6 +1,6 @@
 # sentimental-tweet-analysis
 
-In this project, we are going to analyse negative-positive word balance in tweets ingested directly from Tweeter during a certain time period.
+In this project, we are going to analyze negative-positive word balance in tweets ingested directly from Tweeter during a certain time period.
 
 1. Import tweets using Nifi
 2. Start a Hive notebook
